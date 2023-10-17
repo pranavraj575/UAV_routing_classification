@@ -1,0 +1,8 @@
+NAME : eil51
+COMMENT : 51-city problem (Christofides/Eilon)
+TYPE : TSP
+DIMENSION: 1
+EDGE_WEIGHT_TYPE : EUC_2D
+NODE_COORD_SECTION
+51 30 40
+EOF

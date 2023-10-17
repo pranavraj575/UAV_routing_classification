@@ -1,0 +1,12 @@
+NAME : MM10_depots
+COMMENT : Instance 10 in MD algorithm. Coordinates of depots and vhcl speeds given.
+TYPE : TSP
+DIMENSION : 5
+EDGE_WEIGHT_TYPE : ATT
+NODE_COORD_SECTION
+51 57.7414 97.9788 1
+52 58.8255 81.6171 1
+53 15.1868 80.7170 1
+54 67.7835 79.3016 1
+55 9.3111 83.4786 1
+EOF

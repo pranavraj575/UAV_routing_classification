@@ -1,0 +1,11 @@
+NAME : MM43_depots
+COMMENT : Instance 43 in MD algorithm. Coordinates of depots and vhcl speeds given.
+TYPE : TSP
+DIMENSION : 4
+EDGE_WEIGHT_TYPE : ATT
+NODE_COORD_SECTION
+351 74.0844 94.6916 1
+352 74.0844 94.6916 1
+353 73.7633 51.01 1
+354 73.7633 51.01 1
+EOF

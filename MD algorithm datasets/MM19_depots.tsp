@@ -1,0 +1,11 @@
+NAME : MM19_depots
+COMMENT : Instance 18 in MD algorithm. Coordinates of depots and vhcl speeds given.
+TYPE : TSP
+DIMENSION : 4
+EDGE_WEIGHT_TYPE : ATT
+NODE_COORD_SECTION
+401 20.0000 70.0000 1
+402 70.0000 20.0000 1
+403 10.0000 10.0000 1
+404 10.0000 10.0000 1
+EOF

@@ -1,0 +1,10 @@
+NAME : MM40_depots
+COMMENT : Instance 40 in MD algorithm. Coordinates of depots and vhcl speeds given.
+TYPE : TSP
+DIMENSION : 3
+EDGE_WEIGHT_TYPE : ATT
+NODE_COORD_SECTION
+201 38.9519 75.5119 1
+202 79.9977 29.521 1
+203 39.9794 64.0006 1
+EOF

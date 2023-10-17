@@ -1,0 +1,11 @@
+NAME : MM6_depots
+COMMENT : Instance 6 in MD algorithm. Coordinates of depots and vhcl speeds given.
+TYPE : TSP
+DIMENSION : 4
+EDGE_WEIGHT_TYPE : EUC
+NODE_COORD_SECTION
+401 25.0000 25.0000 1
+402 75.0000 25.0000 1
+403 75.0000 75.0000 1
+404 25.0000 75.0000 1
+EOF

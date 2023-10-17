@@ -1,0 +1,11 @@
+NAME : MM17_depots
+COMMENT : Instance 17 in MD algorithm. Coordinates of depots and vhcl speeds given.
+TYPE : TSP
+DIMENSION : 4
+EDGE_WEIGHT_TYPE : ATT
+NODE_COORD_SECTION
+351 40.0000 50.0000 1
+352 40.0000 50.0000 1
+353 60.0000 50.0000 1
+354 60.0000 50.0000 1
+EOF

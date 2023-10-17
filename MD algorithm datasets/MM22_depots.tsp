@@ -1,0 +1,10 @@
+NAME : MM22_depots
+COMMENT : Instance 22 in MD algorithm. Coordinates of depots and vhcl speeds given.
+TYPE : TSP
+DIMENSION : 3
+EDGE_WEIGHT_TYPE : ATT
+NODE_COORD_SECTION
+251 63.1189 22.4171 1
+252 35.5074 65.2451 1
+253 99.7003 60.4991 1
+EOF

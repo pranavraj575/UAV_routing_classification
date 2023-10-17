@@ -1,0 +1,12 @@
+NAME : MM32_depots
+COMMENT : Instance 32 in MD algorithm. Coordinates of depots and vhcl speeds given.
+TYPE : TSP
+DIMENSION : 5
+EDGE_WEIGHT_TYPE : ATT
+NODE_COORD_SECTION
+51 31.4177 22.8672 1
+52 61.4209 76.9550 1
+53 67.2946 54.4023 1
+54 80.3702 31.2142 1
+55 41.1835 40.6804 1
+EOF

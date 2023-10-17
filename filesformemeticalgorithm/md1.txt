@@ -1,0 +1,8 @@
+the best solution's fitness is 
+170.908
+the sequence of best solution is following
+0 3 11 7 0
+1 9 12 5 1
+2 8 10 6 4 2
+
+the actual costs is 170.908

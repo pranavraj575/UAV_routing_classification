@@ -1,0 +1,3 @@
+PROBLEM_FILE = tmp\myRoute.tsp
+RUNS = 4
+TOUR_FILE =  tmp\myRoute.out
