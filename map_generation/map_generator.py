@@ -1,6 +1,6 @@
 import os, sys, numpy as np
-from PIL import Image
 import matplotlib.image
+import itertools
 
 
 def blob_detection(ground_arr, mask_arr, seed, building_arr=None):
@@ -11,11 +11,8 @@ def blob_detection(ground_arr, mask_arr, seed, building_arr=None):
     while fronteir:
         i, j = fronteir.pop()
         building_arr[i, j] = True
-        for neighbor in ((i + 1, j),
-                         (i - 1, j),
-                         (i, j + 1),
-                         (i, j - 1),
-                         ):
+        # look at neighbors as the 3x3 grid around a pixel (the pixel iteself will be ignored)
+        for neighbor in itertools.product(range(i - 1, i + 2), range(j - 1, j + 2)):
             ip, jp = neighbor
             if ip >= 0 and jp >= 0 and ip < n and jp < m:
                 # if in bounds and there is an unvisited building in the index
@@ -37,17 +34,12 @@ def building_detection(ground_arr, mask_arr=None):
     all_buildings = []
 
     while np.sum(np.logical_and(ground_arr, np.logical_not(mask_arr))):
-        detected = False
         for i in range(len(ground_arr)):
             for j in range(len(ground_arr[i])):
                 if ground_arr[i, j] and not mask_arr[i, j]:
                     building_arr = blob_detection(ground_arr=ground_arr, mask_arr=mask_arr, seed=(i, j))
                     all_buildings.append(building_arr)
                     mask_arr = np.logical_or(mask_arr, building_arr)
-                    detected = True
-                    break
-            if detected:
-                break
     return all_buildings
 
 
@@ -63,17 +55,26 @@ def save_img(arr, filename):
 
 
 PRINTIMG = True
-SIZE_CUTOFF = 50
+PROPORTION_CUTOFF = 5e-5  # proportion of pixels needed to register a building
 DIR = os.path.dirname(sys.argv[0])
 temp_folder = os.path.join(DIR, 'temp')
 if not os.path.exists(temp_folder):
     os.makedirs(temp_folder)
-for dims, filename in (
-        ((511.8, 511.8), 'NewYork_0_1024.map'),  # nyc
-        ((511.6, 511.6), 'Berlin_0_1024.map'),
-):
+
+# (height, width of image in meters), name of file
+# obtained from https://movingai.com/benchmarks/street/index.html
+to_run = (((511.8, 511.8), os.path.join(DIR, 'maps', 'NewYork_0_1024.map')),
+          ((511.6, 511.6), os.path.join(DIR, 'maps', 'Berlin_0_1024.map'))
+          )
+
+to_run = (((511.6, 511.6), os.path.join(DIR, 'maps', 'street-map', filename)) for filename in
+          os.listdir(os.path.join(DIR, 'maps', 'street-map')))
+
+for dims, filepath in to_run:
+    filename = os.path.basename(filepath)
+    print('running', filename)
     trash_lines = 4
-    f = open(os.path.join(DIR, 'maps', filename))
+    f = open(filepath)
     line = f.readline()
     arr = None
     while line:
@@ -88,6 +89,7 @@ for dims, filename in (
         line = f.readline()
     f.close()
     N, M = arr.shape
+    SIZE_CUTOFF = PROPORTION_CUTOFF*M*N
     # building detection
     things = building_detection(ground_arr=arr)
     if PRINTIMG:
@@ -105,9 +107,11 @@ for dims, filename in (
             center = np.mean(np.array(all_stuff), axis=0)
             building_centers[tuple(center)] = thing
             if PRINTIMG:
-                save_img(thing,
-                         filename=os.path.join(temp_folder,
-                                               filename[:filename.index('.')] + 'building_' + str(k) + '_' + '.png'))
+                if False:
+                    save_img(thing,
+                             filename=os.path.join(temp_folder,
+                                                   filepath[:filepath.index('.')] + 'building_' + str(
+                                                       k) + '_' + '.png'))
                 mask = np.stack((thing, thing, thing), axis=2, dtype=float)
                 pix = np.random.rand(3).reshape((1, 1, 3))
                 pix = pix/np.linalg.norm(pix)
@@ -118,17 +122,25 @@ for dims, filename in (
             excess += np.expand_dims(thing, axis=2)
     if PRINTIMG:
         colorful_buildings = (colorful_buildings*128 + excess*127).astype(np.uint8)
-        rad = 4
+        rad = .003*(N + M)/2
         for center in building_centers:
             for i in range(int(center[0] - rad*2), int(center[0] + rad*2)):
                 for j in range(int(center[1] - rad*2), int(center[1] + rad*2)):
                     if i >= 0 and j >= 0 and i < len(colorful_buildings) and j < len(colorful_buildings[i]):
                         if np.linalg.norm(np.array(center) - (i, j)) < rad:
                             colorful_buildings[i, j, :] = (255, 0, 0)
-        save_img(arr=colorful_buildings, filename=os.path.join(temp_folder, filename[:filename.index('.')] + '.png'))
+        save_name = os.path.join(temp_folder, filename[:filename.index('.')] + '.png')
+        print('saving img to', save_name)
+        save_img(arr=colorful_buildings, filename=save_name)
 
-    euclidean_centers=[]
+    euclidean_centers = []
     for i, j in building_centers:
         coords = np.array(dims)*(i/N, j/M) - np.array(dims)/2
         euclidean_centers.append(coords)
+
+    euclidean_centers = np.array(euclidean_centers)
+    save_name = os.path.join(temp_folder, 'center_data_' + filename[:filename.index('.')] + '.txt')
+
     print(euclidean_centers)
+    print('saving points to', save_name)
+    np.savetxt(save_name, euclidean_centers)
