@@ -2,3 +2,6 @@
 /.idea
 /map_generation/temp
 /map_generation/maps
+/compare_to_optimal
+/temp
+/tmp

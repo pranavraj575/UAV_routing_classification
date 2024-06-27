@@ -1,6 +1,6 @@
-include("construct.jl")
-include("utils.jl")
-include("neighborhoods.jl")
+include("src/construct.jl")
+include("src/utils.jl")
+include("src/neighborhoods.jl")
 
 num_vhcls_switch=1
 tol=.000001
@@ -31,18 +31,18 @@ for file in prefixes
     insertion_pairs_by_instance[file]=[]
     println("\n\n",file,"\t",folder)
     data=Data(file,folder)
-    tau=2.
+    current_tau=2.
     # figuring out alpha
     test_alpha=1.
     # alpha is 1/tsp cost
-    test_instance=Instance(data,test_alpha,tau)
+    test_instance=Instance(data,test_alpha,current_tau)
     test_tour=construct_tour_LKH(test_instance,collect(keys(test_instance.targets)))
     test_tour_cost=path_cost(test_instance,test_tour)    
     println("TEST TOUR COST: ",test_tour_cost)
     alpha=1/test_tour_cost
     println("ALPHA: ",alpha)
 
-    instance=Instance(data,alpha,tau)
+    instance=Instance(data,alpha,current_tau)
     route=partition_tours_star_heuristic(instance)
     #vhcl_no_remove=choose_vhcls_for_removal(route,["longest tour"],1)[1]
     for vhcl_no_remove in 1:route.instance.dim_depots

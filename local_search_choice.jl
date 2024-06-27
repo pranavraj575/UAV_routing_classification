@@ -1,5 +1,5 @@
-include("vns.jl")
-include("utils.jl")
+include("src/vns.jl")
+include("src/utils.jl")
 
 PYTHON_COMMAND="python"
 PYTHON_FILE="local_search_choice.py"
@@ -35,18 +35,18 @@ for file in prefixes
     write(f,":{")
     println("\n\n",file,"\t",folder)
     data=Data(file,folder)
-    tau=2.
+    current_tau=2.
     # figuring out alpha
     test_alpha=1.
     # alpha is 1/tsp cost
-    test_instance=Instance(data,test_alpha,tau)
+    test_instance=Instance(data,test_alpha,current_tau)
     test_tour=construct_tour_LKH(test_instance,collect(keys(test_instance.targets)))
     test_tour_cost=path_cost(test_instance,test_tour)    
     println("TEST TOUR COST: ",test_tour_cost)
     alpha=1/test_tour_cost
     println("ALPHA: ",alpha)
 
-    instance=Instance(data,alpha,tau)
+    instance=Instance(data,alpha,current_tau)
     initial=[]
     for removal_types in [["smallest obj"],
                             ["largest obj"],

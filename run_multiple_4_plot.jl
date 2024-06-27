@@ -1,6 +1,6 @@
-include("vns.jl")
+include("src/vns.jl")
 include("writing_table.jl")
-include("utils.jl")
+include("src/utils.jl")
 data_file="temp//new_large_plot_alpha_2_tau_1.txt"
 folder="MD algorithm datasets"
 trials=1

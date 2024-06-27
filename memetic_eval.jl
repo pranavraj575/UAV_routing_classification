@@ -1,6 +1,6 @@
-include("vns.jl")
-include("utils.jl")
-include("network_graphing.jl")
+include("src/vns.jl")
+include("src/utils.jl")
+include("src/network_graphing.jl")
 
 param=2
 local_search_mode="12"
@@ -55,7 +55,10 @@ for file in prefixes
     depot_offset=0
     max_target=0
     for line in split(text,"\n")
-        result=extract_tour(line)
+        result=[]
+        if strip(line)!=""
+            result=extract_tour(line)
+        end
         if result==[]
             continue
         end

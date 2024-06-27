@@ -1,7 +1,7 @@
-include("instance.jl")
-include("route.jl")
-include("vns.jl")
-include("single_vehicle_TSP_dwelltime_functions.jl")
+include("src/instance.jl")
+include("src/route.jl")
+include("src/vns.jl")
+include("src/single_vehicle_TSP_dwelltime_functions.jl")
 using Printf
 output_file="single_vhcl_results_table.tex"
 function real_round(n,digits)
@@ -135,11 +135,11 @@ for file in prefixes
     global warmup
     println("\n\n",file,"\t",folder)
     data=Data(file,folder)
-    tau=2.
+    current_tau=2.
     # figuring out alpha
     test_alpha=1.
     # alpha is 0.5/tsp_cost, 1/tsp cost, or 2/tsp cost
-    test_instance=Instance(data,test_alpha,tau)
+    test_instance=Instance(data,test_alpha,current_tau)
     all_vertices=collect(keys(test_instance.targets))
     for v in collect(keys(test_instance.depots))
         push!(all_vertices,v)
@@ -150,11 +150,11 @@ for file in prefixes
 
     for alpha in [0.5/test_tour_cost, 1/test_tour_cost, 2/test_tour_cost]
         # Fixing the tau value
-        for tau in [0.5, 1, 2]
+        for t in [0.5, 1, 2]
             # alpha=1/test_tour_cost
             println("ALPHA: ",alpha)
 
-            instance=Instance(data,alpha,tau)
+            instance=Instance(data,alpha,t)
             println("Instance alpha value is ", instance.alpha)
             #println("TEST: ",instance.cost_traversal[][1])
             # solver=Solver(instance)
@@ -221,7 +221,7 @@ for file in prefixes
             # now just put them in files 
             if !warmup
                 write_table_entry(file,instance.dim_targets,
-                            tour_cost,alpha,tau,minn,mediann,menan,maxx,TSP_comp_time,dwell_time_comp_time)
+                            tour_cost,alpha,t,minn,mediann,menan,maxx,TSP_comp_time,dwell_time_comp_time)
             end
         end
     end
