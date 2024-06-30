@@ -123,7 +123,7 @@ prefixes=sort(prefixes,by=number_from_file)
 # prefixes=["MM20"]
 prefixes=["rd100","bier127","pr152",
 "d198","pr226","gr229"]
-#prefixes=["rd100"]
+prefixes=["rd100"]
 
 insert!(prefixes,1,"rd100")
 # println(prefixes)
