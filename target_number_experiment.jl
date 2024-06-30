@@ -46,12 +46,14 @@ alpha=alpha_factor/test_tour_cost
 println("ALPHA: ",alpha)
 instance=Instance(data,alpha,tau)
 for i in 1:instance.dim_targets
+    start_time = time()
     tour, dwell_times, tour_cost, key_array=single_vehicle_TSP_dwell_times(instance,[j for j in 1:i];tolerance=.0001)
     G=undiscounted_info_gain_func(dwell_times,[instance.tau for _ in key_array])
     obj_fun=exp(-instance.alpha*sum(dwell_times))*exp(-instance.alpha*tour_cost)*G
     println(i," targets: ",obj_fun)
     write(f,string(obj_fun))
     write(f,",")
+    println("time: ",time()-start_time)
 end
 write(f,"]")
 close(f)

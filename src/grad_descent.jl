@@ -330,7 +330,7 @@ function random_startpoint_generation(taui_arr)
 
     ini_dwell_time = []
     for i in range(1, length(taui_arr))
-        append!(ini_dwell_time, 3*rand()*taui_arr[i])
+        append!(ini_dwell_time, 0)# 3*rand()*taui_arr[i])
     end
 
     return ini_dwell_time
