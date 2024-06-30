@@ -62,15 +62,14 @@ function single_vehicle_TSP_dwell_times(instance::AbstractInstance,
     key_array = [key for key in targ_covered]
     taui_arr = [instance.tau for key in key_array]
     println("Obtaining the tour of the single vehicle.")
+    start_time = time()
     if exact
-        start_time = time()
         tour,tour_cost = single_vehicle_TSP_exact(instance,targ_covered,vhcl_no)
-        end_time = time()
     else
         tour=single_vehicle_TSP_LKH(instance,targ_covered,vhcl_no)
         tour_cost=path_cost(instance,tour)
     end
-    tour_cost=path_cost(instance,tour)
+    end_time = time()
     TSP_time = end_time - start_time
 
     start_time = time()

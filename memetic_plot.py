@@ -1,17 +1,32 @@
+# plots comparision of objective function of memetic algorithm against our algorithm
+# uses output of memetic_eval.jl for memetic values
+# uses output of  
+
 import os,sys,ast
 import numpy as np
 import matplotlib.pyplot as plt
 
 plt.rc('font', size=12) 
 #plt.rc('xtick', labelsize=10.5)
+
 alpha=1
 tau=2
+# which local searches to use
+local_search_mode="12"
+# check top k results in local search
+param=2
+
 outliers=True
+
+meme_folder=os.path.join("output","data_files","memetic_comparison")
+meme_file=os.path.join(meme_folder,
+    "memetic_cmp_meme_data_neighborhoods_"+local_search_mode+"_param_"+str(param)+"_alpha_"+str(alpha)+"_tau_"+str(tau)+".txt")
+
+f=open(meme_file)
+meme_dic=ast.literal_eval(f.read())
+f.close()
+
 if True:
-    meme_file="temp\memetic_cmp_meme_data_neighborhoods_12_param_2_alpha_"+str(alpha)+"_tau_"+str(tau)+".txt"
-    f=open(meme_file)
-    meme_dic=ast.literal_eval(f.read())
-    f.close()
     our_file="temp\\new_large_plot_alpha_"+str(alpha)+"_tau_"+str(tau)+".txt"
     f=open(our_file)
     our_dic=ast.literal_eval(f.read())[(alpha,tau)][("12",2)]

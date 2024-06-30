@@ -1,5 +1,7 @@
+# testing gradient descent functions
+
 using Random, Plots, LaTeXStrings#; pythonplot()
-include(joinpath("src","grad_descent.jl"))
+include(joinpath("..","src","grad_descent.jl"))
 
 function testing_gradient_descent(taui_arr = [], alpha = NaN, figure_name = joinpath("output", "test.pdf"))
     if !isdir("output")

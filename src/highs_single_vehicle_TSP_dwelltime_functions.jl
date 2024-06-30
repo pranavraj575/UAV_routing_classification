@@ -68,7 +68,9 @@ function single_vehicle_TSP_dwell_times(instance::AbstractInstance,
         tour=single_vehicle_TSP_LKH(instance,targ_covered,vhcl_no)
         tour_cost=path_cost(instance,tour)
     end
+
     dwell_times=nesterov_gradient_descent(taui_arr,instance.alpha,1.,initial=initial,tolerance=tolerance)
+
     return tour, dwell_times, tour_cost, key_array
 end
 

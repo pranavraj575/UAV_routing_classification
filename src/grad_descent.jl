@@ -230,7 +230,7 @@ function nesterov_gradient_descent(taui_arr,alpha,eta;tolerance=.0001,initial=no
 
 end
 
-function simple_momentum_gradient_descent(taui_arr,alpha,eta,gamma,tolerance=.0001)
+function simple_momentum_gradient_descent(taui_arr,alpha,eta,gamma;tolerance=.0001)
     # eta is the learning rate
     # gamma is the momentum parameter (larger gamma means less momentum)
     x=[]
@@ -330,7 +330,7 @@ function random_startpoint_generation(taui_arr)
 
     ini_dwell_time = []
     for i in range(1, length(taui_arr))
-        append!(ini_dwell_time, 0)#3*rand()*taui_arr[i])
+        append!(ini_dwell_time, 3*rand()*taui_arr[i])
     end
 
     return ini_dwell_time

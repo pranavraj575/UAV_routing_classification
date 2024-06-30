@@ -1,20 +1,35 @@
+# uses memetic tour output (MD dataset)
+# uses these tours as tour solution, runs gradient descent, then dumps objective values into a file
+# run memetic_plot.py to plot results
+
 include(joinpath("src","vns.jl"))
 include(joinpath("src","utils.jl"))
 include(joinpath("src","network_graphing.jl"))
 
+
+# parameters
+# check top k results in local search
 param=2
+# which types of neighborhood to use in local search
 local_search_mode="12"
+# for calculating alpha and tau 
 alpha_factor=1
 tau=2
 
-identifier="new_neighborhoods_"*local_search_mode*"_param_"*string(param)*"_alpha_"*string(alpha_factor)*"_tau_"*string(tau)
+identifier="neighborhoods_"*local_search_mode*"_param_"*string(param)*"_alpha_"*string(alpha_factor)*"_tau_"*string(tau)
 
 println(identifier)
 
-output_file=joinpath("data_files","memetic_comparision_"*identifier*".txt")
-plot_dir="compare_to_optimal"
+output_dir=joinpath("output","data_files","memetic_comparison")
+plot_dir=joinpath("output","plots","compare_to_optimal")
 
-test_file=joinpath("temp","memetic_cmp_meme_data_"*identifier*".txt")
+output_file=joinpath(output_dir,"memetic_cmp_meme_data_"*identifier*".txt")
+
+for d in (plot_dir,output_dir)
+    if !isdir(d)
+        mkpath(d)
+    end
+end
 
 function extract_tour(line)
     if '.' in line || 't' in line  || line == ""
@@ -23,8 +38,8 @@ function extract_tour(line)
     return [parse(Int64, v) for v in split(line,' ')]
 end
 
-folder="MD algorithm datasets"
-other_folder="filesformemeticalgorithm"
+folder=joinpath("input_data","MD_algorithm_datasets")
+other_folder=joinpath("input_data","filesformemeticalgorithm")
 prefixes=[]
 files=readdir(folder)
 for file in files
@@ -34,18 +49,15 @@ for file in files
     end
 end
 #prefixes=["MM10"]
+
 prefixes=sort(prefixes,by=number_from_file)
-#f=open(output_file,"w")
-g=open(test_file,"w")
-#write(f,"{\n")
+g=open(output_file,"w")
 write(g,"{\n")
 for file in prefixes
     other_file=replace(file,"MM"=>"md")*".txt"
     if !(other_file in readdir(other_folder))
         continue
     end
-    #write(f,"'"*file*"'")
-    #write(f,":")
     write(g,"'"*file*"'")
     write(g,":")
     println("\n\n",file,"\t",folder)
@@ -116,19 +128,9 @@ for file in prefixes
     graph_route(route1,plotname*"_memetic.png")
     #graph_route(route2,plotname*"ours_"*identifier*".png")
 
-    #write(f,"{'memetic':")
-    #write(f,string(route1.soln_cost))
-    #write(f,",")
-    #write(f,"'ours':")
-    #write(f,string(route2.soln_cost))
-    #write(f,"}")
-
     write(g,string(route1.soln_cost))
     write(g,",\n")
     
-    #write(f,",\n")
 end
-#write(f,"\n}")
-#close(f)
 write(g,"\n}")
 close(g)

@@ -5,7 +5,7 @@ include(joinpath("src","utils.jl"))
 param=2
 local_search_mode="12"
 
-plot_dir=joinpath("output","route_plots")
+plot_dir=joinpath("output","plots","route_plots")
 
 output_file_start="neighborhoods_"*local_search_mode*"_param_"*string(param)
 if !isdir(plot_dir)

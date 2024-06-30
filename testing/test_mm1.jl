@@ -1,6 +1,6 @@
-include(joinpath("src","route.jl"))
-include(joinpath("src","construct.jl"))
-include(joinpath("src","highs_single_vehicle_TSP_dwelltime_functions.jl"))
+include(joinpath("..", "src","route.jl"))
+include(joinpath("..", "src","construct.jl"))
+include(joinpath("..", "src","highs_single_vehicle_TSP_dwelltime_functions.jl"))
 # check if same trend is reflected by wide range of alpha/tau variables
 # PARAMETRIC STUDY pick diverse MMs (number of targets per vehicle)
 # first change neighborhood to picking highest objective value and remove it
@@ -8,7 +8,8 @@ include(joinpath("src","highs_single_vehicle_TSP_dwelltime_functions.jl"))
 test_alpha=1.
 # alpha is 1/tsp cost
 tau=2.
-data=Data("MM22", "MD algorithm datasets")
+md_folder=joinpath("input_data","MD_algorithm_datasets")
+data=Data("MM22", md_folder)
 test_instance=Instance(data,test_alpha,tau)
 test_tour=construct_tour_LKH(test_instance,collect(keys(test_instance.targets)))
 test_tour_cost=path_cost(test_instance,test_tour)
