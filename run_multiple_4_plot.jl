@@ -1,10 +1,22 @@
+"""
+creates dataset comparing hyperparameters across all MD algorithm datasets
+hyperparams are 
+    1pt move neighborhoods or both 1pt move and swap neighborhoods
+    top choice or top two choices
+plots can be created with 4_plot.py
+"""
+
 include(joinpath("src","vns.jl"))
 include(joinpath("src","utils.jl"))
 include("writing_table.jl")
-data_file=joinpath("temp","new_large_plot_alpha_2_tau_1.txt")
-folder="MD algorithm datasets"
+data_folder=joinpath("output","data_files")
+data_file=joinpath(data_folder,"four_plot.txt")
+folder=joinpath("input_data","MD_algorithm_datasets")
 trials=1
 
+if !isdir(data_folder)
+    mkpath(data_folder)
+end
 prefixes=[]
 files=readdir(folder)
 for file in files
@@ -46,13 +58,14 @@ for alpha_factor in [2]
                     global warmup
                     loc_prefixes=copy(prefixes)
                     if warmup
+                        println("WARMING UP WITH MM1")
                         insert!(loc_prefixes,1,"MM1")
                     end
 
                     for file in loc_prefixes
                         global warmup
                         println("\t\t\t",file,"\t",folder)
-                        data=Data(file,'\\'*folder)
+                        data=Data(file,folder)
                         # figuring out alpha
                         # alpha is 1/tsp cost
                         test_instance=Instance(data,1.,tau)

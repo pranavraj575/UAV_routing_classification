@@ -8,7 +8,7 @@ include(joinpath("src","highs_single_vehicle_TSP_dwelltime_functions.jl"))
 test_alpha=1.
 # alpha is 1/tsp cost
 tau=2.
-data=Data("MM22","\\MD algorithm datasets\\")
+data=Data("MM22", "MD algorithm datasets")
 test_instance=Instance(data,test_alpha,tau)
 test_tour=construct_tour_LKH(test_instance,collect(keys(test_instance.targets)))
 test_tour_cost=path_cost(test_instance,test_tour)

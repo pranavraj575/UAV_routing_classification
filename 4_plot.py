@@ -1,12 +1,20 @@
+"""
+To be run after run_multiple_4_plot.jl
+"""
 import ast, numpy as np, os
 from matplotlib import pyplot as plt
 
 plt.rc('font', size=12) 
-files=['temp\\new_large_plot_alpha_1_tau_1.txt',
-       'temp\\new_large_plot_alpha_1_tau_2.txt',
-       #'temp\\large_plot_alpha_2_tau_1.txt',
-       #'temp\\large_plot_alpha_2_tau_2.txt'
-       ]
+
+# files to grab dictionary from
+files=[os.path.join("output","data_files","four_plot.txt"),] 
+
+# path to save plots to
+plot_dir=os.path.join("output","plots")
+
+if not os.path.exists(plot_dir):
+    os.makedirs(plot_dir)
+
 dic=dict()
 for filee in files:
     if os.path.exists(filee):
@@ -87,6 +95,7 @@ for plotting in ('percent_improvements','compute_times'):
         ax.set_xticks([x[i] for i in indices], [species[i] for i in indices])
         ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.2),ncol=2,)
 
-        plot_name="plots//new_local_search_"+plotting+"_comparision_alpha_factor_"+str(alpha_factor)+"_tau_"+str(tau)+".png"
+        plot_name=os.path.join(plot_dir,
+                                "local_search_"+plotting+"_comparision_alpha_factor_"+str(alpha_factor)+"_tau_"+str(tau)+".png")
         plt.savefig(plot_name, bbox_inches='tight')
         plt.close()
