@@ -1,3 +1,5 @@
+# Implementation of gradient descent on the objective function
+# implemented classic gradient descent as well as descent with momentum
 using LinearAlgebra, Random
 
 

@@ -1,8 +1,10 @@
+# uses the HiGHS optimizer for solving single vehicle routing problem
+# only works if Gurobi optimizer is installed with liscence
+
 # In this function, a single vehicle TSP is solved using exact algorithm or
 # using LKH.
 
-using JuMP, Gurobi, LinearAlgebra, Random, Plots#; pythonplot()
-#using JuMP, LinearAlgebra, Random, Plots
+using JuMP, Gurobi, LinearAlgebra, Random, Plots
 include("instance.jl")
 include("callback_functions_lazy_cuts.jl")
 include("running_LKH.jl")

@@ -1,3 +1,6 @@
+# Instance class that keeps track of a problem instance
+# includes all information in data, as well as alpha and tau
+
 using Classes, OrderedCollections
 include("data.jl")
 

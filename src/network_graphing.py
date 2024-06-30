@@ -1,3 +1,6 @@
+# uses networkx to graph the result of a tour solution
+# called by network_graphing.jl
+
 import os,sys,ast
 import networkx as nx
 import matplotlib.pyplot as plt

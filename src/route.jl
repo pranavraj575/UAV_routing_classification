@@ -1,3 +1,5 @@
+# route class that keeps track of a solution
+# keeps track of dwell times, costs, and tours for each vehicle
 using Classes
 include("Instance.jl")
 include("highs_single_vehicle_TSP_dwelltime_functions.jl")

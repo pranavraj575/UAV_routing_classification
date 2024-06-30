@@ -1,10 +1,20 @@
+# For constructing initial partition solution using star heuristic
+
 using JuMP
 using Graphs
 using HiGHS 
-#using Gurobi
+using Gurobi
 import MathOptInterface as MOI
 include("route.jl")
-include("highs_single_vehicle_TSP_dwelltime_functions.jl")
+
+
+# set optimizer to use (HiGHS works, but should probably use Gurobi if available)
+OPTIM=Gurobi
+if OPTIM==Gurobi
+    include("single_vehicle_TSP_dwelltime_functions.jl")
+else
+    include("highs_single_vehicle_TSP_dwelltime_functions.jl")
+end
 
 function partition_tours_star_heuristic(instance::AbstractInstance,exact=false)
     # fully constructs a route object
@@ -52,7 +62,7 @@ end
 
 function _partition_star_heuristic_model(instance::AbstractInstance)
     #model = Model(Gurobi.Optimizer)
-    model = Model(HiGHS.Optimizer)
+    model = Model(OPTIM.Optimizer)
     MOI.set(model, MOI.Silent(), true)
 
     # we define variables using these keys

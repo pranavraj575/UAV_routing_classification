@@ -1,3 +1,7 @@
+# graphs solutions to problem
+# function is used to plot the tour of each vehicle in different colors
+# calls the python script network_graphing.py for use of networkx
+
 include("route.jl")
 
 PYTHON_COMMAND="python"

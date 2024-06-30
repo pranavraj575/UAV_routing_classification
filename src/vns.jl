@@ -1,3 +1,6 @@
+# variable neighborhood search
+# creates a solution by local search, through repeated 'shaking' a solution then performing local search
+
 using Classes
 include("route.jl")
 include("instance.jl")

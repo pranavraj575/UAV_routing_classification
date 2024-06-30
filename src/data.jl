@@ -1,3 +1,4 @@
+# Data class for holding information about targets and depots positions
 using Classes, OrderedCollections
 
 # In this file, a class object for storing the data is created.

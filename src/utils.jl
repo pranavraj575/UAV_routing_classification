@@ -1,3 +1,4 @@
+# get number from a string
 function number_from_file(name)
     num=""
     for c in name
