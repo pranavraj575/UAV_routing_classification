@@ -130,7 +130,6 @@ insert!(prefixes,1,"rd100")
 
 f=open(output_file,"w")
 write_table_head()
-folder='\\'*folder
 
 warmup=true
 
