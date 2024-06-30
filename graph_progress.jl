@@ -1,16 +1,18 @@
-include("src/instance.jl")
-include("src/vns.jl")
-include("src/network_graphing.jl")
-include("src/utils.jl")
+include(joinpath("src","instance.jl"))
+include(joinpath("src","vns.jl"))
+include(joinpath("src","network_graphing.jl"))
+include(joinpath("src","utils.jl"))
 param=2
 local_search_mode="12"
 
-output_file_start="output//route_plots//neighborhoods_"*local_search_mode*"_param_"*string(param)
-if !isdir("output//route_plots")
-    mkpath("output//route_plots")
+plot_dir=joinpath("output","route_plots")
+
+output_file_start="neighborhoods_"*local_search_mode*"_param_"*string(param)
+if !isdir(plot_dir)
+    mkpath(plot_dir)
 end
 
-folder="input_data//MD_algorithm_datasets"
+folder=joinpath("input_data", "MD_algorithm_datasets")
 
 prefixes=[]
 files=readdir(folder)
@@ -24,7 +26,6 @@ end
 
 prefixes=sort(prefixes, by=number_from_file)
 
-folder='\\'*folder
 for file in prefixes
     println("\n\n",file,"\t",folder)
     data=Data(file,folder)
@@ -49,7 +50,7 @@ for file in prefixes
         exit()
     end
     for (name,route) in (("initial",solver.initial_solution),("local_search",solver.local_search_solution),("final",solver.final_solution),)
-        output_file_name=output_file_start*"_instance_"*file*"_"*name*"_solution.png"
+        output_file_name=joinpath(plot_dir,output_file_start*"_instance_"*file*"_"*name*"_solution.png")
         graph_route(route,output_file_name)
         println(name)
         println("OBJ: ",route.soln_cost)

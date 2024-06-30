@@ -23,7 +23,7 @@ function construct_tour_LKH(instance, vertices_covered, precision = 2.0)
     # Constructing the weight matrix
     matrix = weight_matrix_construction(instance, vertices_covered, precision)
     # Constructing the .TSP file
-    filename = raw"tmp\myRoute.tsp"
+    filename = joinpath("tmp", "myRoute.tsp")
     if !isdir("tmp")
         mkdir("tmp")
     end

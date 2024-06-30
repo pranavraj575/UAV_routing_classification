@@ -1,7 +1,7 @@
-include("src/vns.jl")
+include(joinpath("src","vns.jl"))
+include(joinpath("src","utils.jl"))
 include("writing_table.jl")
-include("src/utils.jl")
-data_file="temp//new_large_plot_alpha_2_tau_1.txt"
+data_file=joinpath("temp","new_large_plot_alpha_2_tau_1.txt")
 folder="MD algorithm datasets"
 trials=1
 

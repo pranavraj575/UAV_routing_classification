@@ -1,10 +1,10 @@
-include("route.jl")
+include(joinpath("src","route.jl"))
+include(joinpath("src","construct.jl"))
+include(joinpath("src","highs_single_vehicle_TSP_dwelltime_functions.jl"))
 # check if same trend is reflected by wide range of alpha/tau variables
 # PARAMETRIC STUDY pick diverse MMs (number of targets per vehicle)
 # first change neighborhood to picking highest objective value and remove it
 # 
-include("construct.jl")
-include("highs_single_vehicle_TSP_dwelltime_functions.jl")
 test_alpha=1.
 # alpha is 1/tsp cost
 tau=2.

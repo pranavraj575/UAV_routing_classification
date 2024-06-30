@@ -1,12 +1,12 @@
-include("src/construct.jl")
-include("src/utils.jl")
-include("src/neighborhoods.jl")
+include(joinpath("src","construct.jl"))
+include(joinpath("src","utils.jl"))
+include(joinpath("src","neighborhoods.jl"))
 
 num_vhcls_switch=1
 tol=.000001
 
-data_file_removal="data_files/proxy_cmp_removal.txt"
-data_file_insertion="data_files/proxy_cmp_insertion.txt"
+data_file_removal=joinpath("data_files","proxy_cmp_removal.txt")
+data_file_insertion=joinpath("data_files","proxy_cmp_insertion.txt")
 
 folder="MD algorithm datasets"
 
@@ -25,7 +25,6 @@ prefixes=sort(prefixes,by=number_from_file)
 
 removal_pairs_by_instance=Dict()
 insertion_pairs_by_instance=Dict()
-folder='\\'*folder
 for file in prefixes
     removal_pairs_by_instance[file]=[]
     insertion_pairs_by_instance[file]=[]

@@ -1,6 +1,6 @@
-include("src/vns.jl")
-include("src/utils.jl")
-include("src/network_graphing.jl")
+include(joinpath("src","vns.jl"))
+include(joinpath("src","utils.jl"))
+include(joinpath("src","network_graphing.jl"))
 
 param=2
 local_search_mode="12"
@@ -11,10 +11,10 @@ identifier="new_neighborhoods_"*local_search_mode*"_param_"*string(param)*"_alph
 
 println(identifier)
 
-output_file="data_files\\memetic_comparision_"*identifier*".txt"
+output_file=joinpath("data_files","memetic_comparision_"*identifier*".txt")
 plot_dir="compare_to_optimal"
 
-test_file="temp\\memetic_cmp_meme_data_"*identifier*".txt"
+test_file=joinpath("temp","memetic_cmp_meme_data_"*identifier*".txt")
 
 function extract_tour(line)
     if '.' in line || 't' in line  || line == ""
@@ -39,7 +39,6 @@ prefixes=sort(prefixes,by=number_from_file)
 g=open(test_file,"w")
 #write(f,"{\n")
 write(g,"{\n")
-folder='\\'*folder
 for file in prefixes
     other_file=replace(file,"MM"=>"md")*".txt"
     if !(other_file in readdir(other_folder))
@@ -50,7 +49,7 @@ for file in prefixes
     write(g,"'"*file*"'")
     write(g,":")
     println("\n\n",file,"\t",folder)
-    text=prod([string(Char(chr)) for chr in read(open(other_folder*"\\"*other_file))])
+    text=prod([string(Char(chr)) for chr in read(open(joinpath(other_folder,other_file)))])
     tours=[]
     depot_offset=0
     max_target=0
@@ -113,7 +112,7 @@ for file in prefixes
     #    [Dict("num_vhcls_switch" => param, "vhcl_removal_choices" => ["longest tour","most targets"]) for _ in 1:length(local_search_mode)])
     #route2=solver.final_solution
     #println("OUR OBJECTIVE: ",route2.soln_cost)
-    plotname=plot_dir*"\\"*file
+    plotname=joinpath(plot_dir,file)
     graph_route(route1,plotname*"_memetic.png")
     #graph_route(route2,plotname*"ours_"*identifier*".png")
 

@@ -18,7 +18,7 @@ using Classes, OrderedCollections
         # Obtaining the current directory
         curr_dir = pwd()
         # Changing directory to the folder containing the data
-        new_dir = curr_dir * path
+        new_dir = joinpath(curr_dir, path)
         cd(new_dir)
         # Reading the file containing information about the targets and depots
         lines_targets = readlines(name * "_targets.tsp")

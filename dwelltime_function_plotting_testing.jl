@@ -1,8 +1,7 @@
 using Random, Plots, LaTeXStrings#; pythonplot()
-include("src/grad_descent.jl")
+include(joinpath("src","grad_descent.jl"))
 
-function testing_gradient_descent(taui_arr = [], alpha = NaN,
-    figure_name = "output/test.pdf")
+function testing_gradient_descent(taui_arr = [], alpha = NaN, figure_name = joinpath("output", "test.pdf"))
     if !isdir("output")
         mkdir("output")
     end
@@ -72,7 +71,7 @@ function plot_info_gain(rng,tau,figure_name)
     savefig(figure_name)
 end
 
-function plot_objective_wrt_d(rng,alpha,k,figure_name="obj_plot.pdf",dim=2)
+function plot_objective_wrt_d(rng,alpha,k,figure_name=joinpath("output","obj_plot.pdf"),dim=2)
     plot()
     res=[]
     taui=[k for i in range(1,dim)]
@@ -89,7 +88,7 @@ function plot_objective_wrt_d(rng,alpha,k,figure_name="obj_plot.pdf",dim=2)
     savefig(figure_name)
 end
 
-function plot_dwell_time_wrt_k(rng,alpha,figure_name="dweel_plot.pdf",dim=2)
+function plot_dwell_time_wrt_k(rng,alpha,figure_name=joinpath("output", "dweel_plot.pdf"),dim=2)
     plot()
     res=[]
     for k in rng

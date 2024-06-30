@@ -3,13 +3,13 @@ using Graphs
 using HiGHS 
 #using Gurobi
 import MathOptInterface as MOI
-include("route.jl")
-include("highs_single_vehicle_TSP_dwelltime_functions.jl")
-include("construct.jl")
+include(joinpath("src","route.jl"))
+include(joinpath("src","highs_single_vehicle_TSP_dwelltime_functions.jl"))
+include(joinpath("src","construct.jl"))
 
 if true
 
-    d=Data("MM7","\\MD algorithm datasets\\")
+    d=Data("MM7","MD algorithm datasets")
     instance=Instance(d,1.,2.)
     i2=_perturb_similar_depots(instance)
     #model=partition_star_heuristic_model(i2)

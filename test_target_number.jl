@@ -1,22 +1,22 @@
-include("route.jl")
+include(joinpath("src","route.jl"))
+include(joinpath("src","construct.jl"))
+include(joinpath("src","highs_single_vehicle_TSP_dwelltime_functions.jl"))
 
 PYTHON_COMMAND="python"
 PYTHON_FILE="test_target_number.py"
 
 alpha_factor=1.
 tau=2.
-temp_file="temp//targets_alpha_"*string(alpha_factor)*"_tau_"*string(tau)*".txt"
-output_file="plots//targets_alpha_"*string(alpha_factor)*"_tau_"*string(tau)*".png"
+temp_file=joinpath("temp","targets_alpha_"*string(alpha_factor)*"_tau_"*string(tau)*".txt")
+output_file=joinpath("plots","targets_alpha_"*string(alpha_factor)*"_tau_"*string(tau)*".png")
 cleanup=false
 
 # check if same trend is reflected by wide range of alpha/tau variables
 # PARAMETRIC STUDY pick diverse MMs (number of targets per vehicle)
 # first change neighborhood to picking highest objective value and remove it
 # 
-include("construct.jl")
-include("highs_single_vehicle_TSP_dwelltime_functions.jl")
 test_alpha=1.
-data=Data("MM22","\\MD algorithm datasets\\")
+data=Data("MM22","MD algorithm datasets")
 test_instance=Instance(data,test_alpha,1.)
 test_tour=construct_tour_LKH(test_instance,collect(keys(test_instance.targets)))
 test_tour_cost=path_cost(test_instance,test_tour)

@@ -1,9 +1,9 @@
-include("src/instance.jl")
-include("src/route.jl")
-include("src/vns.jl")
-include("src/single_vehicle_TSP_dwelltime_functions.jl")
+include(joinpath("src","instance.jl"))
+include(joinpath("src","route.jl"))
+include(joinpath("src","vns.jl"))
+include(joinpath("src","single_vehicle_TSP_dwelltime_functions.jl"))
 using Printf
-output_file="output/single_vhcl_results_table.tex"
+output_file=joinpath("output","single_vhcl_results_table.tex")
 if !isdir("output")
     mkdir("output")
 end

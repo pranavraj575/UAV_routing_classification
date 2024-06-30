@@ -1,13 +1,13 @@
-include("src/vns.jl")
-include("src/utils.jl")
+include(joinpath("src","vns.jl"))
+include(joinpath("src","utils.jl"))
 
 PYTHON_COMMAND="python"
 PYTHON_FILE="local_search_choice.py"
 param=2
 local_search_mode="12"
-temp_file="temp//bar_neighborhoods_"*local_search_mode*"_param"*string(param)*".txt"
-output_file="plots//bar_neighborhoods_"*local_search_mode*"_param"*string(param)*".png"
-table_file="data_files//improvement_table_neighborhoods_"*local_search_mode*"_param"*string(param)*".tex"
+temp_file=joinpath("temp","bar_neighborhoods_"*local_search_mode*"_param"*string(param)*".txt")
+output_file=joinpath("plots","bar_neighborhoods_"*local_search_mode*"_param"*string(param)*".png")
+table_file=joinpath("data_files","improvement_table_neighborhoods_"*local_search_mode*"_param"*string(param)*".tex")
 cleanup=false
 f=open(temp_file,"w")
 write(f,"{")

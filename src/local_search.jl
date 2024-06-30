@@ -12,7 +12,7 @@ function one_point_best_proxy_dict(instance,partition,tau_dict,alpha,dwell_times
     for part in partition
         dwell_arr=[dwell_times_dict[key] for key in part]
         taui_arr=[tau_dict[key] for key in part]
-        push!(Gis,info_gain(dwell_arr,taui_arr))
+        push!(Gis,undiscounted_info_gain_func(dwell_arr,taui_arr))
     end
     for a in range(1,length(partition))
         # moving from partiton of vehicle A, index a
@@ -147,37 +147,6 @@ function del_element(vector,element)
     deleteat!(vector, findall(x->x==element,vector))
     return vector
 end
-function Ii(dwell_time,tau)
-    # computing each Ii function
-    if dwell_time<0
-        return Inf
-    end
-    Pi = 1 - 0.5*exp(-sqrt(dwell_time/tau))
-    Ii=Pi*log(Pi) + (1 - Pi)*log(1 - Pi) + log(2)
-
-    # Checking if Ii is NaN, which occurs when Pi is 1. This occurs when the dwell
-    # time is very large in comparison to tau, which makes information gain zero.
-    if isnan(Ii)
-        return Inf
-    end
-    return Ii
-end
-
-function info_gain(dwell_time_arr, taui_arr)
-    # Computing the "G" function
-    G = 0
-    for i in range(1, length(dwell_time_arr))
-        G+=Ii(dwell_time_arr[i],taui_arr[i])
-    end
-
-    # Checking if G is NaN, which occurs when Pi is 1. This occurs when the dwell
-    # time is very large in comparison to tau, which makes information gain zero.
-    if isnan(G)
-        return Inf
-    end
-    
-    return G
-end
 
 function lazy_obj_function_by_vehicle(instance,partition,tau_dict,alpha,dwell_times_dict,tours)
     # returns objective function for given partition for each vehicle
@@ -195,7 +164,7 @@ function lazy_obj_function_by_vehicle(instance,partition,tau_dict,alpha,dwell_ti
         
         tour=tours[p]
         path_cost=path_cost(instance,tour)
-        Ji=exp(-alpha*(sum(dwell_time_arr)))*exp(-alpha*path_cost)*info_gain(dwell_times,tau_vector)
+        Ji=exp(-alpha*(sum(dwell_time_arr)))*exp(-alpha*path_cost)*undiscounted_info_gain_func(dwell_times,tau_vector)
         push!(Jis,Ji)
     end
     return Jis
