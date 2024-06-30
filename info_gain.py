@@ -1,4 +1,5 @@
 import numpy as np
+import os
 from matplotlib import pyplot as plt
 
 tau=.5
@@ -12,5 +13,9 @@ def Ii(d):
 
 grid=np.array(list(range(num)))/num*max_rng
 plt.plot(grid,[Ii(d) for d in grid])
-plt.savefig("plots//info_gain.png")
+
+plot_folder=os.path.join("output","plots")
+if not os.path.exists(plot_folder):
+    os.makedirs(plot_folder)
+plt.savefig(os.path.join(plot_folder, 'info_gain.png'))
 plt.show()

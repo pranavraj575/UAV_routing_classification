@@ -24,6 +24,9 @@ function construct_tour_LKH(instance, vertices_covered, precision = 2.0)
     matrix = weight_matrix_construction(instance, vertices_covered, precision)
     # Constructing the .TSP file
     filename = raw"tmp\myRoute.tsp"
+    if !isdir("tmp")
+        mkdir("tmp")
+    end
     # Opening the .tsp file
     f = open(filename, "w")
     # Writing onto the .tsp file

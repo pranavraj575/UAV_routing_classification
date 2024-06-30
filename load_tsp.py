@@ -1,8 +1,18 @@
-import os,sys,gzip,tarfile
+import os,sys,gzip,tarfile,shutil
 
+DIR = os.path.dirname(os.path.join(os.getcwd(), os.path.dirname(sys.argv[0])))
 #FILE DIRECTORIES HERE
-tsp_dir='temp' # place to put .tsp.gz files
+# list of files/folders to load
+input_files=[
+        os.path.join(DIR,'input_data','ALL_tsp.tar.gz'),
+            ]
+
 output_folder="tsp_files" # place to put the _depots.tsp and the _targets.tsp
+temp_folder=os.path.join("temp","loading_tsp") # place for moving files/trash files
+
+
+SOURCE_DIR=os.path.join(DIR,temp_folder)
+OUT_DIR=os.path.join(DIR,output_folder)
 
 # number of depots to use
 num_depots=1
@@ -12,6 +22,11 @@ max_dim=250
 
 # unzips tar.gz as well, and goes through all subdirs
 recursive=True 
+
+if not os.path.exists(SOURCE_DIR):
+    os.makedirs(SOURCE_DIR)
+for path in input_files:
+    shutil.copy(path, SOURCE_DIR)
 
 
 def targz(file,out_dir):
@@ -47,13 +62,6 @@ def unzip_and_find_tsp(directory,recursive=True):
                 for thing in unzip_and_find_tsp(full,recursive=recursive):
                     yield thing
 
-
-DIR = os.path.dirname(os.path.join(os.getcwd(), os.path.dirname(sys.argv[0])))
-
-
-
-SOURCE_DIR=os.path.join(DIR,tsp_dir)
-OUT_DIR=os.path.join(DIR,output_folder)
 
 #making ouput folder if not existing
 if not os.path.exists(OUT_DIR):
@@ -119,4 +127,4 @@ for tsp_file in unzip_and_find_tsp(SOURCE_DIR,recursive=recursive):
                                      num_depots=num_depots,
                                      max_dim=max_dim)
 
-
+shutil.rmtree(SOURCE_DIR)

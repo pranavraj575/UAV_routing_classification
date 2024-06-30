@@ -3,7 +3,10 @@ include("src/route.jl")
 include("src/vns.jl")
 include("src/single_vehicle_TSP_dwelltime_functions.jl")
 using Printf
-output_file="single_vhcl_results_table.tex"
+output_file="output/single_vhcl_results_table.tex"
+if !isdir("output")
+    mkdir("output")
+end
 function real_round(n,digits)
     return round(n*10^digits)/10^(digits)
 end

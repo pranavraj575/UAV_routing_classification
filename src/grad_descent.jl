@@ -1,3 +1,5 @@
+using LinearAlgebra, Random
+
 
 function Ii(dwell_time,tau)
     # computing each Ii function

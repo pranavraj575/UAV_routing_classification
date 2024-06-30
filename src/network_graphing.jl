@@ -1,7 +1,7 @@
 include("route.jl")
 
 PYTHON_COMMAND="python"
-PYTHON_FILE="network_graphing.py"
+PYTHON_FILE="src//network_graphing.py"
 
 
 function graph_route(route,output_file,temp_file_name="temp//TEMP.txt",cleanup=false)

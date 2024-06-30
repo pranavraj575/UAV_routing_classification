@@ -1,13 +1,16 @@
-include("instance.jl")
-include("vns.jl")
-include("network_graphing.jl")
-include("utils.jl")
+include("src/instance.jl")
+include("src/vns.jl")
+include("src/network_graphing.jl")
+include("src/utils.jl")
 param=2
 local_search_mode="12"
 
-output_file_start="route_plots//neighborhoods_"*local_search_mode*"_param_"*string(param)
+output_file_start="output//route_plots//neighborhoods_"*local_search_mode*"_param_"*string(param)
+if !isdir("output//route_plots")
+    mkpath("output//route_plots")
+end
 
-folder="MD algorithm datasets"
+folder="input_data//MD_algorithm_datasets"
 
 prefixes=[]
 files=readdir(folder)
@@ -17,9 +20,9 @@ for file in files
         push!(prefixes,prefix)
     end
 end
+# prefixes=["MM12"]
 
-#prefixes=["MM12"]
-prefixes=sort(prefixes,by=number_from_file)
+prefixes=sort(prefixes, by=number_from_file)
 
 folder='\\'*folder
 for file in prefixes
