@@ -1,8 +1,0 @@
-NAME : eil76
-COMMENT : 76-city problem (Christofides/Eilon)
-TYPE : TSP
-DIMENSION: 1
-EDGE_WEIGHT_TYPE : EUC_2D
-NODE_COORD_SECTION
-76 40 40
-EOF
