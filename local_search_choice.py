@@ -1,3 +1,4 @@
+# plots output of local_search_choice.jl
 import os,sys,ast
 import numpy as np
 import matplotlib.pyplot as plt
@@ -6,9 +7,9 @@ plt.rc('font', size=12)
 param=2
 local_search_mode="1"
 #plt.rc('xtick', labelsize=10.5)
-input_file="temp//bar_neighborhoods_"+local_search_mode+"_param"+str(param)+".txt"#sys.argv[1]
-output_file="plots//bar_neighborhoods_"+local_search_mode+"_param"+str(param)+".png"#sys.argv[2]
-table_file="data_files//improvement_table_neighborhoods_"+local_search_mode+"_param"+str(param)+".tex"#sys.argv[3]
+input_file=sys.argv[1]#"temp//bar_neighborhoods_"+local_search_mode+"_param"+str(param)+".txt"
+output_file=sys.argv[2]#"plots//bar_neighborhoods_"+local_search_mode+"_param"+str(param)+".png"
+table_file=sys.argv[3]#"data_files//improvement_table_neighborhoods_"+local_search_mode+"_param"+str(param)+".tex"
 cleanup=False#sys.argv[4]=='true'
 
 f=open(input_file)

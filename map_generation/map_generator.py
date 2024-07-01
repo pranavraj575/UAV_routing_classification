@@ -13,7 +13,7 @@ to_run = (((511.8, 511.8), os.path.join(map_gen_dir, 'maps', 'NewYork_0_1024.map
           ((511.6, 511.6), os.path.join(map_gen_dir, 'maps', 'Berlin_0_1024.map'))
           )
 
-to_run = (((511.6, 511.6), os.path.join(map_gen_dir, 'maps', 'street-map', filename)) for filename in
+to_runf = (((511.6, 511.6), os.path.join(map_gen_dir, 'maps', 'street-map', filename)) for filename in
           os.listdir(os.path.join(map_gen_dir, 'maps', 'street-map')))
 
 image_folder = os.path.join(DIR, 'output', 'plots', 'generated_maps')
@@ -147,4 +147,4 @@ for dims, filepath in to_run:
 
     print('number of buildings:',len(euclidean_centers))
     print('saving points to', save_name)
-    np.savetxt(save_name, euclidean_centers)
+    np.savetxt(save_name, euclidean_centers,fmt='%.4f')

@@ -1,3 +1,6 @@
+# compares different choices for swapping neighborhoods
+# plot results with local_search_choice.py
+
 include(joinpath("src","vns.jl"))
 include(joinpath("src","utils.jl"))
 
@@ -5,11 +8,14 @@ PYTHON_COMMAND="python"
 PYTHON_FILE="local_search_choice.py"
 param=2
 local_search_mode="12"
-temp_file=joinpath("temp","bar_neighborhoods_"*local_search_mode*"_param"*string(param)*".txt")
-output_file=joinpath("plots","bar_neighborhoods_"*local_search_mode*"_param"*string(param)*".png")
-table_file=joinpath("data_files","improvement_table_neighborhoods_"*local_search_mode*"_param"*string(param)*".tex")
+
+ident="neighborhoods_"*local_search_mode*"_param"*string(param)
+
+output_file=joinpath("output","data_files","local_search_choice","values_"*ident*".txt")
+plot_file=joinpath("output","plots","local_search_choice","bar_neighborhoods_"*local_search_mode*"_param"*string(param)*".png")
+table_file=joinpath("output","data_files","local_search_choice","improvement_table_neighborhoods_"*local_search_mode*"_param"*string(param)*".tex")
 cleanup=false
-f=open(temp_file,"w")
+f=open(output_file,"w")
 write(f,"{")
 
 folder="MD algorithm datasets"
@@ -80,4 +86,4 @@ end
 
 write(f,"}")
 close(f)
-run(`$PYTHON_COMMAND $PYTHON_FILE $temp_file $output_file $table_file $cleanup`)
+run(`$PYTHON_COMMAND $PYTHON_FILE $output_file $plot_file $table_file $cleanup`)
