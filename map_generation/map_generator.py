@@ -2,6 +2,26 @@ import os, sys, numpy as np
 import matplotlib.image
 import itertools
 
+PRINTIMG = True  # whether to save image
+PROPORTION_CUTOFF = 5e-5  # proportion of pixels needed to register a building
+map_gen_dir = os.path.dirname(os.path.join(os.getcwd(), sys.argv[0]))
+DIR = os.path.dirname(map_gen_dir)
+
+# (height, width of image in meters), name of file
+# obtained from https://movingai.com/benchmarks/street/index.html
+to_run = (((511.8, 511.8), os.path.join(map_gen_dir, 'maps', 'NewYork_0_1024.map')),
+          ((511.6, 511.6), os.path.join(map_gen_dir, 'maps', 'Berlin_0_1024.map'))
+          )
+
+to_run = (((511.6, 511.6), os.path.join(map_gen_dir, 'maps', 'street-map', filename)) for filename in
+          os.listdir(os.path.join(map_gen_dir, 'maps', 'street-map')))
+
+image_folder = os.path.join(DIR, 'output', 'plots', 'generated_maps')
+output_folder = os.path.join(DIR, "output","data_files", "generated_maps")
+for d in (image_folder,output_folder):
+    if not os.path.exists(d):
+        os.makedirs(d)
+
 
 def blob_detection(ground_arr, mask_arr, seed, building_arr=None):
     if building_arr is None:
@@ -54,22 +74,6 @@ def save_img(arr, filename):
     )
 
 
-PRINTIMG = True
-PROPORTION_CUTOFF = 5e-5  # proportion of pixels needed to register a building
-DIR = os.path.dirname(sys.argv[0])
-temp_folder = os.path.join(DIR, 'temp')
-if not os.path.exists(temp_folder):
-    os.makedirs(temp_folder)
-
-# (height, width of image in meters), name of file
-# obtained from https://movingai.com/benchmarks/street/index.html
-to_run = (((511.8, 511.8), os.path.join(DIR, 'maps', 'NewYork_0_1024.map')),
-          ((511.6, 511.6), os.path.join(DIR, 'maps', 'Berlin_0_1024.map'))
-          )
-
-to_run = (((511.6, 511.6), os.path.join(DIR, 'maps', 'street-map', filename)) for filename in
-          os.listdir(os.path.join(DIR, 'maps', 'street-map')))
-
 for dims, filepath in to_run:
     filename = os.path.basename(filepath)
     print('running', filename)
@@ -109,7 +113,7 @@ for dims, filepath in to_run:
             if PRINTIMG:
                 if False:
                     save_img(thing,
-                             filename=os.path.join(temp_folder,
+                             filename=os.path.join(image_folder,
                                                    filepath[:filepath.index('.')] + 'building_' + str(
                                                        k) + '_' + '.png'))
                 mask = np.stack((thing, thing, thing), axis=2, dtype=float)
@@ -129,7 +133,7 @@ for dims, filepath in to_run:
                     if i >= 0 and j >= 0 and i < len(colorful_buildings) and j < len(colorful_buildings[i]):
                         if np.linalg.norm(np.array(center) - (i, j)) < rad:
                             colorful_buildings[i, j, :] = (255, 0, 0)
-        save_name = os.path.join(temp_folder, filename[:filename.index('.')] + '.png')
+        save_name = os.path.join(image_folder, filename[:filename.index('.')] + '.png')
         print('saving img to', save_name)
         save_img(arr=colorful_buildings, filename=save_name)
 
@@ -139,8 +143,8 @@ for dims, filepath in to_run:
         euclidean_centers.append(coords)
 
     euclidean_centers = np.array(euclidean_centers)
-    save_name = os.path.join(temp_folder, 'center_data_' + filename[:filename.index('.')] + '.txt')
+    save_name = os.path.join(output_folder, 'center_data_' + filename[:filename.index('.')] + '.txt')
 
-    print(euclidean_centers)
+    print('number of buildings:',len(euclidean_centers))
     print('saving points to', save_name)
     np.savetxt(save_name, euclidean_centers)
