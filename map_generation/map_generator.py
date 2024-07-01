@@ -13,12 +13,12 @@ to_run = (((511.8, 511.8), os.path.join(map_gen_dir, 'maps', 'NewYork_0_1024.map
           ((511.6, 511.6), os.path.join(map_gen_dir, 'maps', 'Berlin_0_1024.map'))
           )
 
-to_runf = (((511.6, 511.6), os.path.join(map_gen_dir, 'maps', 'street-map', filename)) for filename in
-          os.listdir(os.path.join(map_gen_dir, 'maps', 'street-map')))
+# to_run = (((511.6, 511.6), os.path.join(map_gen_dir, 'maps', 'street-map', filename)) for filename in
+#          os.listdir(os.path.join(map_gen_dir, 'maps', 'street-map')))
 
 image_folder = os.path.join(DIR, 'output', 'plots', 'generated_maps')
-output_folder = os.path.join(DIR, "output","data_files", "generated_maps")
-for d in (image_folder,output_folder):
+output_folder = os.path.join(DIR, "output", "data_files", "generated_maps")
+for d in (image_folder, output_folder):
     if not os.path.exists(d):
         os.makedirs(d)
 
@@ -145,6 +145,6 @@ for dims, filepath in to_run:
     euclidean_centers = np.array(euclidean_centers)
     save_name = os.path.join(output_folder, 'center_data_' + filename[:filename.index('.')] + '.txt')
 
-    print('number of buildings:',len(euclidean_centers))
+    print('number of buildings:', len(euclidean_centers))
     print('saving points to', save_name)
-    np.savetxt(save_name, euclidean_centers,fmt='%.4f')
+    np.savetxt(save_name, euclidean_centers, fmt='%.4f')
