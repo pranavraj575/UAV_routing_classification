@@ -1,21 +1,34 @@
-"""
-creates dataset comparing hyperparameters across all MD algorithm datasets
-hyperparams are 
-    1pt move neighborhoods or both 1pt move and swap neighborhoods
-    top choice or top two choices
-plots can be created with 4_plot.py
-"""
+# creates dataset comparing hyperparameters across all MD algorithm datasets
+# hyperparams are 
+#     1pt move neighborhoods or both 1pt move and swap neighborhoods
+#     top choice or top two choices
+# plots can be created with 4_plot.py
+
 
 include(joinpath("src","vns.jl"))
 include(joinpath("src","utils.jl"))
-include("writing_table.jl")
-data_folder=joinpath("output","data_files")
-data_file=joinpath(data_folder,"four_plot.txt")
-folder=joinpath("input_data","MD_algorithm_datasets")
-trials=1
+include(joinpath("src","network_graphing.jl"))
 
-if !isdir(data_folder)
-    mkpath(data_folder)
+# number of times to run each experiment
+trials=3
+# these are the parameters that we will run
+# note that we check the cartesian product of all of these
+alpha_factors=[2,1]
+tau_values=[1.,2.]
+local_search_modes=["1","12"]
+param_choices=[1,2]
+
+
+data_folder=joinpath("output","data_files")
+data_file=joinpath(data_folder,"experiment_results.txt")
+plot_dir=joinpath("output","plots","compare_to_optimal")
+folder=joinpath("input_data","MD_algorithm_datasets")
+
+
+for d in (data_folder,plot_dir)
+    if !isdir(d)
+        mkpath(d)
+    end
 end
 prefixes=[]
 files=readdir(folder)
@@ -25,20 +38,20 @@ for file in files
         push!(prefixes,prefix)
     end
 end
-# prefixes=["MM16"]
+# prefixes=["MM1"]
 # prefixes=[ "MM"*string(num) for num in [18]]
 prefixes=sort(prefixes,by=number_from_file)
 warmup=true
 dic=Dict()
 println("SAVING TO: ",data_file)
-for alpha_factor in [2]
-    for tau in [1.]
+for alpha_factor in alpha_factors
+    for tau in tau_values
         global dic
         dic[(alpha_factor,tau)]=Dict()
         println("USING ALPHA FACTOR: ",alpha_factor)
         println("USING TAU: ",tau)
-        for local_search_mode in ["1","12"]
-            for param in [1,2]
+        for local_search_mode in local_search_modes
+            for param in param_choices
                 global dic
                 dic[(alpha_factor,tau)][(local_search_mode,param)]= Dict(fix=>Dict(
                                                                             "compute_times"=>Float64[],
@@ -110,6 +123,9 @@ for alpha_factor in [2]
                             println("\t\t\t\tINITIAL OBJ:\t",initial_obj)
                             println("\t\t\t\tFINAL OBJ:\t",final_obj)
                             println("\t\t\t\tFINAL time:\t",final_time)
+                            identifier="neighborhoods_"*local_search_mode*"_param_"*string(param)*"_alpha_"*string(alpha_factor)*"_tau_"*string(tau)
+                            plotname=joinpath(plot_dir,file*identifier*"_ours.png")
+                            graph_route(solver.final_solution,plotname)
                         else
                             println("\t\t\t\tWARM UP DONE")
                         end
@@ -120,6 +136,8 @@ for alpha_factor in [2]
         end
     end
 end
+
+# write results into dictionary format
 f=open(data_file,"w")
 write(f,"{\n")
 for key in keys(dic)
