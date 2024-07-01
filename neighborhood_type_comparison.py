@@ -1,5 +1,5 @@
 """
-To be run after run_multiple_4_plot.jl
+To be run after run_experiment.jl
 """
 import ast, numpy as np, os
 from matplotlib import pyplot as plt
@@ -7,10 +7,10 @@ from matplotlib import pyplot as plt
 plt.rc('font', size=12) 
 
 # files to grab dictionary from
-files=[os.path.join("output","data_files","four_plot.txt"),] 
+files=[os.path.join("output","data_files","experiment_results","MD_all_values.txt"),] 
 
 # path to save plots to
-plot_dir=os.path.join("output","plots")
+plot_dir=os.path.join("output","plots","neighborhood_type_comparison")
 
 if not os.path.exists(plot_dir):
     os.makedirs(plot_dir)

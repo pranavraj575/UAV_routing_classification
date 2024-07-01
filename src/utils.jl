@@ -6,5 +6,8 @@ function number_from_file(name)
             num=num*c
         end
     end
+    if num==""
+        num="0"
+    end
     return parse(Int32,num)
 end

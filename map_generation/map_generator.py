@@ -2,6 +2,10 @@ import os, sys, numpy as np
 import matplotlib.image
 import itertools
 
+seed=69
+np.random.seed(seed)
+
+
 PRINTIMG = True  # whether to save image
 PROPORTION_CUTOFF = 5e-5  # proportion of pixels needed to register a building
 map_gen_dir = os.path.dirname(os.path.join(os.getcwd(), sys.argv[0]))
@@ -22,6 +26,39 @@ for d in (image_folder, output_folder):
     if not os.path.exists(d):
         os.makedirs(d)
 
+def random_split(points,random_range=(.05,.2)):
+    # splits into (targets, depots) and returns those
+    # random range is the proportion of depots
+    p=random_range[0]+np.random.random()*(random_range[1]-random_range[0])
+    points=points.copy()
+    idx=int(len(points)*p)+1
+    np.random.shuffle(points)
+    return points[idx:], points[:idx]
+
+def create_tsp_files(targets,depots,folder,basename,decimals=4):
+    for points,depot in ((targets,False),(depots,True)):
+        instance_name=basename+('_depots' if depot else '_targets')
+        tring=("NAME : "+instance_name+
+        "\nCOMMENT : Instance 1 in MD algorithm. Coordinates of depots and vhcl speeds given."+
+        "\nTYPE : TSP"+
+        "\nDIMENSION : "+str(len(points))+
+        "\nEDGE_WEIGHT_TYPE : ATT"+
+        "\nNODE_COORD_SECTION"
+        )
+        for (i,point) in enumerate(points):
+            target_no=i+(len(targets) if depot else 0)+1
+            tring+='\n'+' '.join([
+                                    str(target_no),
+                                    str(round(point[0],decimals)), 
+                                    str(round(point[1],decimals)),
+                                    '1' if depot else '_'
+                                ])
+        tring+='\nEOF'
+
+        filename=os.path.join(folder,instance_name+'.tsp')
+        f=open(filename,'w')
+        f.write(tring)
+        f.close()
 
 def blob_detection(ground_arr, mask_arr, seed, building_arr=None):
     if building_arr is None:
@@ -143,8 +180,8 @@ for dims, filepath in to_run:
         euclidean_centers.append(coords)
 
     euclidean_centers = np.array(euclidean_centers)
-    save_name = os.path.join(output_folder, 'center_data_' + filename[:filename.index('.')] + '.txt')
+    targets,depots=random_split(euclidean_centers)
+    create_tsp_files(targets,depots,output_folder,filename[:filename.index('.')])
 
     print('number of buildings:', len(euclidean_centers))
-    print('saving points to', save_name)
-    np.savetxt(save_name, euclidean_centers, fmt='%.4f')
+    print('saving points at', os.path.join(output_folder,filename[:filename.index('.')]))

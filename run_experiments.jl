@@ -2,7 +2,8 @@
 # hyperparams are 
 #     1pt move neighborhoods or both 1pt move and swap neighborhoods
 #     top choice or top two choices
-# plots can be created with 4_plot.py
+# plots can be created with neighborhood_type_comparison.py
+# output can be compared to memetic in memetic_plot.py
 
 
 include(joinpath("src","vns.jl"))
@@ -17,21 +18,25 @@ alpha_factors=[2,1]
 tau_values=[1.,2.]
 local_search_modes=["1","12"]
 param_choices=[1,2]
+#experiment_name="MD_all_values"
+#input_dir=joinpath("input_data","MD_algorithm_datasets")
+
+experiment_name="real_world_all_values"
+input_dir=joinpath("output","data_files","generated_maps")
 
 
-data_folder=joinpath("output","data_files")
-data_file=joinpath(data_folder,"experiment_results.txt")
+data_dir=joinpath("output","data_files","experiment_results")
 plot_dir=joinpath("output","plots","compare_to_optimal")
-folder=joinpath("input_data","MD_algorithm_datasets")
 
 
-for d in (data_folder,plot_dir)
+data_file=joinpath(data_dir,experiment_name*".txt")
+for d in (data_dir,plot_dir)
     if !isdir(d)
         mkpath(d)
     end
 end
 prefixes=[]
-files=readdir(folder)
+files=readdir(input_dir)
 for file in files
     if occursin("_depots.tsp",file)
         prefix=file[1:length(file)-11]
@@ -71,14 +76,14 @@ for alpha_factor in alpha_factors
                     global warmup
                     loc_prefixes=copy(prefixes)
                     if warmup
-                        println("WARMING UP WITH MM1")
-                        insert!(loc_prefixes,1,"MM1")
+                        println("WARMING UP WITH ",prefixes[1])
+                        insert!(loc_prefixes,1,prefixes[1])
                     end
 
                     for file in loc_prefixes
                         global warmup
-                        println("\t\t\t",file,"\t",folder)
-                        data=Data(file,folder)
+                        println("\t\t\t",file,"\t",input_dir)
+                        data=Data(file,input_dir)
                         # figuring out alpha
                         # alpha is 1/tsp cost
                         test_instance=Instance(data,1.,tau)
