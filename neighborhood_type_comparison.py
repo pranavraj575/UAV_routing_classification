@@ -1,6 +1,5 @@
-"""
-To be run after run_experiment.jl
-"""
+# To be run after run_experiment.jl
+
 import ast, numpy as np, os
 from matplotlib import pyplot as plt
 

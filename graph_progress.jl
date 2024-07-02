@@ -1,3 +1,4 @@
+# graphs calculated tours of runs
 include(joinpath("src","instance.jl"))
 include(joinpath("src","vns.jl"))
 include(joinpath("src","network_graphing.jl"))

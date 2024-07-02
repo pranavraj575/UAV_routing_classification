@@ -1,3 +1,5 @@
+# generate maps from files obtained from https://movingai.com/benchmarks/street/index.html
+# format is a binary array formatted as an ASCII text file for some reason
 import os, sys, numpy as np
 import matplotlib.image
 import itertools
@@ -17,7 +19,6 @@ depot_proportion_range=(.05,.2)
 
 
 # (height, width of image in meters), name of file
-# obtained from https://movingai.com/benchmarks/street/index.html
 to_run = (
             ((511.8, 511.8), os.path.join(map_gen_dir, 'maps', 'NewYork_0_1024.map')),
             ((511.6, 511.6), os.path.join(map_gen_dir, 'maps', 'Berlin_0_1024.map')),

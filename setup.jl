@@ -1,3 +1,4 @@
+# all packages used by julia, run file for setup
 import Pkg; 
 Pkg.add("Classes"); 
 Pkg.add("OrderedCollections");
