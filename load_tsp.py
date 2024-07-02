@@ -1,3 +1,6 @@
+# load all tsp files from tar.gz file (downloaded from TSPLIB http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp/)
+# puts them into tsp_files folder
+
 import os,sys,gzip,tarfile,shutil
 
 DIR = os.path.dirname(os.path.join(os.getcwd(), os.path.dirname(sys.argv[0])))

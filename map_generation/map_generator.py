@@ -2,8 +2,9 @@ import os, sys, numpy as np
 import matplotlib.image
 import itertools
 
+# random seed
+# so for each file, we generate the same map every time
 seed=69
-np.random.seed(seed)
 
 
 PRINTIMG = True  # whether to save image
@@ -13,8 +14,9 @@ DIR = os.path.dirname(map_gen_dir)
 
 # (height, width of image in meters), name of file
 # obtained from https://movingai.com/benchmarks/street/index.html
-to_run = (((511.8, 511.8), os.path.join(map_gen_dir, 'maps', 'NewYork_0_1024.map')),
-          ((511.6, 511.6), os.path.join(map_gen_dir, 'maps', 'Berlin_0_1024.map'))
+to_run = (
+            ((511.6, 511.6), os.path.join(map_gen_dir, 'maps', 'Berlin_0_1024.map')),
+            ((511.8, 511.8), os.path.join(map_gen_dir, 'maps', 'NewYork_0_1024.map')),
           )
 
 # to_run = (((511.6, 511.6), os.path.join(map_gen_dir, 'maps', 'street-map', filename)) for filename in
@@ -112,6 +114,7 @@ def save_img(arr, filename):
 
 
 for dims, filepath in to_run:
+    np.random.seed(seed)
     filename = os.path.basename(filepath)
     print('running', filename)
     trash_lines = 4

@@ -7,7 +7,10 @@ from matplotlib import pyplot as plt
 plt.rc('font', size=12) 
 
 # files to grab dictionary from
-files=[os.path.join("output","data_files","experiment_results","MD_all_values.txt"),] 
+files=[
+        os.path.join("output","data_files","experiment_results","MD_all_values.txt"),
+        os.path.join("output","data_files","experiment_results","real_world_all_values.txt"),
+        ] 
 
 # path to save plots to
 plot_dir=os.path.join("output","plots","neighborhood_type_comparison")
@@ -19,24 +22,35 @@ dic=dict()
 for filee in files:
     if os.path.exists(filee):
         r=open(filee)
-        dic.update(ast.literal_eval(r.read()))
+        other_dic=ast.literal_eval(r.read())
         r.close()
+        for alpha_tau in other_dic:
+            if alpha_tau not in dic:
+                dic[alpha_tau]=other_dic[alpha_tau]
+            else:
+                for neigh in other_dic[alpha_tau]:
+                    if neigh not in dic[alpha_tau]:
+                        dic[alpha_tau][neigh]=other_dic[alpha_tau][neigh]
+                    else:
+                        dic[alpha_tau][neigh].update(other_dic[alpha_tau][neigh])
 index_dict={}
+percent_key='percent_improvement'
+time_key='final_time'
 y_ax_conversion={
-    'percent_improvements':'% Improvement from Initial',
-    'compute_times':'Computation Time'
+    percent_key:'% Improvement from Initial',
+    time_key:'Computation Time'
 }
 def index(alpha_factor,tau,field,key):
     global index_dict
     dicc=dic[(alpha_factor,tau)][field][key]
-    percents=dicc['percent_improvements']
-    times=dicc['compute_times']
+    percents=dicc[percent_key]
+    times=dicc[time_key]
 
     if (alpha_factor,tau,field,key) not in index_dict:
         index_dict[(alpha_factor,tau,field,key)]=max(list(range(len(percents))),key=lambda i:percents[i])
     return index_dict[(alpha_factor,tau,field,key)]
     
-for plotting in ('percent_improvements','compute_times'):
+for plotting in (percent_key,time_key):
     print(plotting)
     for alpha_factor,tau in dic:
         print("\talpha:",alpha_factor,"; tau:",tau)
@@ -46,7 +60,7 @@ for plotting in ('percent_improvements','compute_times'):
         for field in fields:
             if field in d:
                 species=list(d[field].keys())
-                species.sort(key=lambda s:int(s[2:]))
+                species.sort(key=lambda s:int(s[2:]) if s[2:].isdigit() else 0)
                 penguin_means[field]=[d[field][key][plotting][index(alpha_factor,tau,field,key)] for key in species]
                 print("\t\tfield:",field)
                 minn=round(np.min(penguin_means[field]),2)

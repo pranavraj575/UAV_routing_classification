@@ -37,6 +37,29 @@ function check_if_valid(route)
     return true
 end
 
+function solver_to_dict(solver)
+    init_sol=solver.initial_solution
+    local_sol=solver.local_search_solution
+    final_sol=solver.final_solution
+    
+    data=solver.instance.data
+
+    return Dict(
+
+        "initial_solution"=>[init_sol.vhcl_tours[i] for i in 1: data.dim_depots],
+        "initial_obj"=>init_sol.soln_cost,
+        "initial_time"=>solver.initial_time,
+
+        "local_search_solution"=>[local_sol.vhcl_tours[i] for i in 1: data.dim_depots],
+        "local_search_obj"=>local_sol.soln_cost,
+        "local_search_time"=>solver.local_search_time,
+
+        "final_solution"=>[final_sol.vhcl_tours[i] for i in 1: data.dim_depots],
+        "final_obj"=>final_sol.soln_cost,
+        "final_time"=>solver.perturbation_time
+    )
+end
+
 @class Solver begin
     start_time::BigFloat # Start time of the solver
     progress::Dict # Progress made by the heuristic

@@ -14,16 +14,22 @@ include(joinpath("src","network_graphing.jl"))
 trials=3
 # these are the parameters that we will run
 # note that we check the cartesian product of all of these
-alpha_factors=[2,1]
-tau_values=[1.,2.]
+alpha_factors=[2]#,1]
+tau_values=[1.]#,2.]
 local_search_modes=["1","12"]
 param_choices=[1,2]
-#experiment_name="MD_all_values"
-#input_dir=joinpath("input_data","MD_algorithm_datasets")
 
-experiment_name="real_world_all_values"
-input_dir=joinpath("output","data_files","generated_maps")
 
+save_routes=false
+
+if true
+    #experiment_name="MD_all_values"
+    experiment_name="MD_alpha_2_tau_1"
+    input_dir=joinpath("input_data","MD_algorithm_datasets")
+else
+    experiment_name="real_world_all_values"
+    input_dir=joinpath("output","data_files","generated_maps")
+end
 
 data_dir=joinpath("output","data_files","experiment_results")
 plot_dir=joinpath("output","plots","compare_to_optimal")
@@ -58,16 +64,7 @@ for alpha_factor in alpha_factors
         for local_search_mode in local_search_modes
             for param in param_choices
                 global dic
-                dic[(alpha_factor,tau)][(local_search_mode,param)]= Dict(fix=>Dict(
-                                                                            "compute_times"=>Float64[],
-                                                                            "percent_improvements"=>Float64[],
-                                                                            "initial_obj"=>Float64[],
-                                                                            "initial_time"=>Float64[],
-                                                                            "local_search_obj"=>Float64[],
-                                                                            "local_search_time"=>Float64[],
-                                                                            "final_obj"=>Float64[],
-                                                                            ) 
-                                                                        for fix in prefixes)
+                temp_dic= Dict(prefix=>Dict() for prefix in prefixes)
                 
                 println("\tUSING LOCAL SEARCH MODE "*local_search_mode)
                 println("\tUSING LOCAL SEARCH PARAM "*string(param))
@@ -104,30 +101,27 @@ for alpha_factor in alpha_factors
                         end
                         initial_obj=solver.initial_solution.soln_cost
                         final_obj=solver.final_solution.soln_cost
-                        final_time=solver.perturbation_time
                         percent_improvement=100*(final_obj-initial_obj)/initial_obj
                         if !warmup
-                            push!(dic[(alpha_factor,tau)][(local_search_mode,param)][file]["compute_times"],
-                                        final_time)
-                            push!(dic[(alpha_factor,tau)][(local_search_mode,param)][file]["percent_improvements"],
-                                        percent_improvement)
-                            
+                            solver_dic=solver_to_dict(solver)
+                            solver_dic["percent_improvement"]=percent_improvement
 
-                            
-                            push!(dic[(alpha_factor,tau)][(local_search_mode,param)][file]["initial_obj"],
-                                        initial_obj)    
-                            push!(dic[(alpha_factor,tau)][(local_search_mode,param)][file]["initial_time"],
-                                        solver.initial_time)
-                            push!(dic[(alpha_factor,tau)][(local_search_mode,param)][file]["local_search_obj"],
-                                        solver.local_search_solution.soln_cost)  
-                            push!(dic[(alpha_factor,tau)][(local_search_mode,param)][file]["local_search_time"],
-                                        solver.local_search_time)
-                            push!(dic[(alpha_factor,tau)][(local_search_mode,param)][file]["final_obj"],
-                                        final_obj)
+                            if !save_routes
+                                for k in ("initial_solution","local_search_solution","final_solution")
+                                    delete!(solver_dic,k)
+                                end
+                            end
 
+                            for key in keys(solver_dic)
+                                if key in keys(temp_dic[file])
+                                    push!(temp_dic[file][key], solver_dic[key])
+                                else
+                                    temp_dic[file][key]=[solver_dic[key]]
+                                end
+                            end
                             println("\t\t\t\tINITIAL OBJ:\t",initial_obj)
                             println("\t\t\t\tFINAL OBJ:\t",final_obj)
-                            println("\t\t\t\tFINAL time:\t",final_time)
+                            println("\t\t\t\tFINAL time:\t",solver.perturbation_time)
                             identifier="neighborhoods_"*local_search_mode*"_param_"*string(param)*"_alpha_"*string(alpha_factor)*"_tau_"*string(tau)
                             plotname=joinpath(plot_dir,file*identifier*"_ours.png")
                             graph_route(solver.final_solution,plotname)
@@ -137,6 +131,7 @@ for alpha_factor in alpha_factors
                         warmup=false
                     end
                 end
+                dic[(alpha_factor,tau)][(local_search_mode,param)]=temp_dic
             end
         end
     end

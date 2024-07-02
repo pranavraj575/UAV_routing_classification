@@ -1,3 +1,5 @@
+# plots info gain wrt time spent
+
 import numpy as np
 import os
 from matplotlib import pyplot as plt
