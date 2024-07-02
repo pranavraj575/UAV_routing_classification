@@ -103,9 +103,9 @@ end
         initial_solution=NaN
         local_search_solution=NaN
 
-        initial_time=NaN
-        local_search_time=NaN
-        perturbation_time=NaN
+        initial_time=0.
+        local_search_time=0.
+        perturbation_time=0.
         
         # Obtaining the neighborhoods for local search
         local_search_moves = []
@@ -147,7 +147,7 @@ end
         # we can end here if there is only one vehicle
         if instance.dim_depots==1
             return new(start_time, progress, x, instance, time_limit,
-                        initial_solution,local_search_solution,
+                        initial_solution,initial_solution, # copy initial solution (also x) for all solutions
                         initial_time,local_search_time,perturbation_time)
         end
         if debug

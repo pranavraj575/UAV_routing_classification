@@ -1,3 +1,4 @@
+# outdated method to write a table with dwell times and tour costs
 local_search_mode=ARGS[1]
 param=parse(Int64,ARGS[2])
 println("USING LOCAL SEARCH MODE "*local_search_mode)

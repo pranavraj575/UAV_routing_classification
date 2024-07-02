@@ -14,21 +14,44 @@ include(joinpath("src","network_graphing.jl"))
 trials=3
 # these are the parameters that we will run
 # note that we check the cartesian product of all of these
+# alpha and tau may be redefined when making experiments to have a better split of data
 alpha_factors=[1,2]
 tau_values=[1.,2.]
+
 local_search_modes=["1","12"]
 param_choices=[1,2]
 
 
-save_routes=true
+# save includes dwell times, tours, and tour costs
+save_large_file=false
+
+
+prefixes=nothing
+
+# define experiment name and input path
+# also explicitly define which files to use by setting prefixes=[list of file prefixes]
+if true
+    # split the alpha_factors and tau into 4 trials
+    alpha_factor_to_use=1
+    tau_to_use=1
+
+    alpha_factors=[alpha_factor_to_use]
+    tau_values=[float(tau_to_use)]
+    experiment_name="MD_alpha_"*string(alpha_factor_to_use)*"_tau_"*string(tau_to_use)
+
+    input_dir=joinpath("input_data","MD_algorithm_datasets")
+end
 
 if false
-    # experiment_name="MD_test"
-    #experiment_name="MD_alpha_1_tau_1"
-    input_dir=joinpath("input_data","MD_algorithm_datasets")
-else
     experiment_name="real_world_all_values"
     input_dir=joinpath("output","data_files","generated_maps")
+end
+
+if false
+    experiment_name="tsp_dataset_all_values"
+    input_dir=joinpath("tsp_files")
+    prefixes=["rd100","bier127","pr152",
+        "d198","pr226","gr229"]
 end
 
 data_dir=joinpath("output","data_files","experiment_results")
@@ -41,16 +64,17 @@ for d in (data_dir,plot_dir)
         mkpath(d)
     end
 end
-prefixes=[]
-files=readdir(input_dir)
-for file in files
-    if occursin("_depots.tsp",file)
-        prefix=file[1:length(file)-11]
-        push!(prefixes,prefix)
+if prefixes==nothing
+    prefixes=[]
+    files=readdir(input_dir)
+    for file in files
+        if occursin("_depots.tsp",file)
+            prefix=file[1:length(file)-11]
+            push!(prefixes,prefix)
+        end
     end
 end
-# prefixes=["MM1"]
-# prefixes=[ "MM"*string(num) for num in [18]]
+
 prefixes=sort(prefixes,by=number_from_file)
 warmup=true
 dic=Dict()
@@ -61,33 +85,36 @@ for alpha_factor in alpha_factors
         dic[(alpha_factor,tau)]=Dict()
         for local_search_mode in local_search_modes
             for param in param_choices
-                println("USING ALPHA FACTOR: ",alpha_factor)
-                println("USING TAU: ",tau)
-                println("\tUSING LOCAL SEARCH MODE "*local_search_mode)
-                println("\tUSING LOCAL SEARCH PARAM "*string(param))
-
                 global dic
                 temp_dic= Dict(prefix=>Dict() for prefix in prefixes)
                 
-                for trial in 1:trials
-                    println("\t\tTRIAL: ",trial)
-                    global warmup
-                    loc_prefixes=copy(prefixes)
-                    if warmup
-                        println("WARMING UP WITH ",prefixes[1])
-                        insert!(loc_prefixes,1,prefixes[1])
-                    end
-
-                    for file in loc_prefixes
+                
+                global warmup
+                loc_prefixes=copy(prefixes)
+                if warmup
+                    println("WARMING UP WITH ",prefixes[1])
+                    insert!(loc_prefixes,1,prefixes[1])
+                end
+                for file in loc_prefixes
+                    
+                    println("USING ALPHA FACTOR: ",alpha_factor)
+                    println("USING TAU: ",tau)
+                    println("\tUSING LOCAL SEARCH MODE "*local_search_mode)
+                    println("\tUSING LOCAL SEARCH PARAM "*string(param))
+                    println("\t\t",file,"\t",input_dir)
+                    test_data=Data(file,input_dir)
+                    # figuring out alpha
+                    # alpha is 1/tsp cost
+                    test_instance=Instance(test_data,1.,tau)
+                    test_tour=construct_tour_LKH(test_instance,collect(keys(test_instance.targets)))
+                    test_tour_cost=path_cost(test_instance,test_tour)    
+                    alpha=alpha_factor/test_tour_cost
+                    temp_dic[file]["alpha_value"]=alpha
+                    for trial in 1:trials
+                        println("\t\t\tTRIAL: ",trial)
                         global warmup
-                        println("\t\t\t",file,"\t",input_dir)
+
                         data=Data(file,input_dir)
-                        # figuring out alpha
-                        # alpha is 1/tsp cost
-                        test_instance=Instance(data,1.,tau)
-                        test_tour=construct_tour_LKH(test_instance,collect(keys(test_instance.targets)))
-                        test_tour_cost=path_cost(test_instance,test_tour)    
-                        alpha=alpha_factor/test_tour_cost
 
                         instance=Instance(data,alpha,tau)
                         solver=Solver(instance;
@@ -107,7 +134,7 @@ for alpha_factor in alpha_factors
                             solver_dic=solver_to_dict(solver)
                             solver_dic["percent_improvement"]=percent_improvement
 
-                            if !save_routes
+                            if !save_large_file
                                 for key_start in ("initial","local_search","final")
                                     for key_end in ("_solution",
                                         "_tour_costs",
@@ -132,8 +159,12 @@ for alpha_factor in alpha_factors
                             plotname=joinpath(plot_dir,file*identifier*"_ours.png")
                             graph_route(solver.final_solution,plotname)
                         else
-                            println("\t\t\t\tWARM UP DONE")
+                            println("not saving because warm up")
                         end
+                        
+                    end
+                    if warmup
+                        println("\t\t\t\tWARM UP DONE")
                         warmup=false
                     end
                 end
