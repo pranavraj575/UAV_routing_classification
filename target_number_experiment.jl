@@ -7,7 +7,7 @@ include(joinpath("src","construct.jl"))
 include(joinpath("src","highs_single_vehicle_TSP_dwelltime_functions.jl"))
 
 PYTHON_COMMAND="python"
-PYTHON_FILE="target_number_experiment.py"
+PYTHON_FILE=joinpath("python_helper_scripts","target_number_experiment.py")
 
 
 temp_dir=joinpath("output","temp","target_number_experiment")

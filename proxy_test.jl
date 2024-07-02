@@ -1,3 +1,9 @@
+# compares proxy costs with real objective changes for MD instances
+# calls proxy_cmp_plot.py
+
+PYTHON_COMMAND="python"
+PYTHON_FILE=joinpath("python_helper_scripts","proxy_cmp_plot.py")
+
 include(joinpath("src","construct.jl"))
 include(joinpath("src","utils.jl"))
 include(joinpath("src","neighborhoods.jl"))
@@ -5,10 +11,10 @@ include(joinpath("src","neighborhoods.jl"))
 num_vhcls_switch=1
 tol=.000001
 
-data_file_removal=joinpath("data_files","proxy_cmp_removal.txt")
-data_file_insertion=joinpath("data_files","proxy_cmp_insertion.txt")
+data_file_removal=joinpath("output","data_files","proxy_cmp_removal.txt")
+data_file_insertion=joinpath("output","data_files","proxy_cmp_insertion.txt")
 
-folder="MD algorithm datasets"
+folder=joinpath("input_data","MD_algorithm_datasets")
 
 prefixes=[]
 files=readdir(folder)
@@ -20,7 +26,7 @@ for file in files
 end
 
 # prefixes=["MM16"]
-# prefixes=["MM3"]
+# prefixes=["MM3", "MM6"]
 prefixes=sort(prefixes,by=number_from_file)
 
 removal_pairs_by_instance=Dict()
@@ -133,3 +139,5 @@ for (data_file,dic) in ((data_file_removal,removal_pairs_by_instance),(data_file
     write(f,"}")
     close(f)
 end
+
+run(`$PYTHON_COMMAND $PYTHON_FILE`)

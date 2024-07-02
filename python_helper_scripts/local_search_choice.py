@@ -4,8 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 plt.rc('font', size=12) 
 
-param=2
-local_search_mode="1"
+#param=2
+#local_search_mode="1"
 #plt.rc('xtick', labelsize=10.5)
 input_file=sys.argv[1]#"temp//bar_neighborhoods_"+local_search_mode+"_param"+str(param)+".txt"
 output_file=sys.argv[2]#"plots//bar_neighborhoods_"+local_search_mode+"_param"+str(param)+".png"

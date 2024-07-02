@@ -1,7 +1,11 @@
-import ast,numpy as np
+import ast,numpy as np, os
 from matplotlib import pyplot as plt
+
+plot_dir=os.path.join("output","proxy_cmp_plots")
+if not os.path.exists(plot_dir):
+    os.makedirs(plot_dir)
 for mode in 'removal','insertion':
-    file="data_files/proxy_cmp_"+mode+".txt"
+    file=os.path.join("output","data_files","proxy_cmp_"+mode+".txt")
     f=open(file,'r')
     dic=ast.literal_eval(f.read())
     f.close()
@@ -24,7 +28,7 @@ for mode in 'removal','insertion':
         plt.legend()
         plt.ylabel("Predicted Objective Change")
         plt.xlabel("True Objective Change")
-        plt.savefig("proxy_cmp_plots\\"+instance+"_"+mode+"_proxy_scatter.png")
+        plt.savefig(os.path.join(plot_dir,instance+"_"+mode+"_proxy_scatter.png"))
         plt.close()
 
         # plot by target        
@@ -33,7 +37,7 @@ for mode in 'removal','insertion':
         plt.legend()
         plt.xlabel("Target Number")
         plt.ylabel("Vehicle Objective Change")
-        plt.savefig("proxy_cmp_plots\\"+instance+"_"+mode+"_proxy_scatter_by_target.png")
+        plt.savefig(os.path.join(plot_dir,instance+"_"+mode+"_proxy_scatter_by_target.png"))
         plt.close()
         diffs=data[:,1]-data[:,0]
         diffs_by_instance[instance]=diffs
@@ -55,7 +59,7 @@ for mode in 'removal','insertion':
     plt.legend()
     plt.ylabel("Predicted Objective Change")
     plt.xlabel("True Objective Change")
-    plt.savefig("proxy_cmp_plots\\overall_"+mode+"_proxy_scatter.png")
+    plt.savefig(os.path.join(plot_dir,"overall_"+mode+"_proxy_scatter.png"))
     plt.close()
 
     #plt.scatter(range(len(data)),data[:,1],label="proxy costs",color='blue',marker='x')
@@ -63,7 +67,7 @@ for mode in 'removal','insertion':
     #plt.legend()
     #plt.xlabel("Target Number")
     #plt.ylabel("Objective")
-    #plt.savefig("proxy_cmp_plots\\overall_"+mode+"_proxy_scatter_by_target.png")
+    #plt.savefig(os.path.join(plot_dir,"overall_"+mode+"_proxy_scatter_by_target.png"))
     #plt.close()
     print(mode)
     diffs=data[:,1]-data[:,0]
@@ -72,4 +76,38 @@ for mode in 'removal','insertion':
     print("median:",np.median(diffs))
     print("min:",np.min(diffs))
     print("pos:",len(np.where(diffs>0)[0]),"out of",len(diffs))
+
+    # box plot
+    all_data=[]
+    labels=["MM"+str(i) for i in range(1,44)]
+    for instance in labels:
+        print(instance)
+        if instance in dic:
+            data=dic[instance]
+            #data.sort()
+            data=np.array(data)
+
+
+            diffs=data[:,1]-data[:,0]
+            if max(diffs)>0:
+                print(max(diffs))
+            all_data.append(diffs)
+
+
+    plt.boxplot(all_data, vert=True, patch_artist=False, #labels=labels
+                 )
+    count=10
+    step=(len(all_data)-1)/(count-1)
+    indices=[int(round(i*step))+1 for i in range(count)]
+    plt.xticks(indices,["MM"+str(i) for i in indices])
+    
+    #plt.tick_params( bottom=False,labelbottom=False)
+
+    #plt.setp( ax.get_xticklabels(), visible=False)
+    plt.title("Real objective change - Proxy estimate")
+    plt.ylabel("Difference")
+    plt.xlabel("Instance")
+    plt.savefig(os.path.join(plot_dir,"overall_"+mode+"_proxy_boxy.png"))
+    plt.close()
+
     print()

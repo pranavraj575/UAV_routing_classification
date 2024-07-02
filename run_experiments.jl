@@ -14,17 +14,17 @@ include(joinpath("src","network_graphing.jl"))
 trials=3
 # these are the parameters that we will run
 # note that we check the cartesian product of all of these
-alpha_factors=[2]#,1]
+alpha_factors=[1]#,2]
 tau_values=[1.]#,2.]
 local_search_modes=["1","12"]
 param_choices=[1,2]
 
 
-save_routes=false
+save_routes=true
 
 if true
     #experiment_name="MD_all_values"
-    experiment_name="MD_alpha_2_tau_1"
+    experiment_name="MD_alpha_1_tau_1"
     input_dir=joinpath("input_data","MD_algorithm_datasets")
 else
     experiment_name="real_world_all_values"

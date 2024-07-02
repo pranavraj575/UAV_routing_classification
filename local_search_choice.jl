@@ -5,21 +5,31 @@ include(joinpath("src","vns.jl"))
 include(joinpath("src","utils.jl"))
 
 PYTHON_COMMAND="python"
-PYTHON_FILE="local_search_choice.py"
+PYTHON_FILE=joinpath("python_helper_scripts","local_search_choice.py")
 param=2
 local_search_mode="12"
 
 ident="neighborhoods_"*local_search_mode*"_param"*string(param)
 
-output_file=joinpath("output","data_files","local_search_choice","values_"*ident*".txt")
-plot_file=joinpath("output","plots","local_search_choice","bar_neighborhoods_"*local_search_mode*"_param"*string(param)*".png")
-table_file=joinpath("output","data_files","local_search_choice","improvement_table_neighborhoods_"*local_search_mode*"_param"*string(param)*".tex")
+output_dir=joinpath("output","data_files","local_search_choice")
+plot_dir=joinpath("output","plots","local_search_choice")
+
+output_file=joinpath(output_dir,"values_"*ident*".txt")
+plot_file=joinpath(plot_dir,"bar_neighborhoods_"*local_search_mode*"_param"*string(param)*".png")
+table_file=joinpath(output_dir,"improvement_table_neighborhoods_"*local_search_mode*"_param"*string(param)*".tex")
 cleanup=false
+
+
+
+folder=joinpath("input_data","MD_algorithm_datasets")
+
+for d in (output_dir,plot_dir)
+    if !isdir(d)
+        mkpath(d)
+    end
+end
 f=open(output_file,"w")
 write(f,"{")
-
-folder="MD algorithm datasets"
-
 prefixes=[]
 files=readdir(folder)
 for file in files
@@ -35,7 +45,6 @@ end
 #prefixes=["MM"*string(i) for i in 1:10]
 
 prefixes=sort(prefixes,by=number_from_file)
-folder='\\'*folder
 for file in prefixes
     write(f,"'"*file*"'")
     write(f,":{")
