@@ -7,16 +7,20 @@ import itertools
 seed=69
 
 
-PRINTIMG = True  # whether to save image
+PRINTIMG = False  # whether to save image
 PROPORTION_CUTOFF = 5e-5  # proportion of pixels needed to register a building
 map_gen_dir = os.path.dirname(os.path.join(os.getcwd(), sys.argv[0]))
 DIR = os.path.dirname(map_gen_dir)
 
+# proportion of buildings to make depots (randomly chooses a proportion in the range)
+depot_proportion_range=(.05,.2)
+
+
 # (height, width of image in meters), name of file
 # obtained from https://movingai.com/benchmarks/street/index.html
 to_run = (
-            ((511.6, 511.6), os.path.join(map_gen_dir, 'maps', 'Berlin_0_1024.map')),
             ((511.8, 511.8), os.path.join(map_gen_dir, 'maps', 'NewYork_0_1024.map')),
+            ((511.6, 511.6), os.path.join(map_gen_dir, 'maps', 'Berlin_0_1024.map')),
           )
 
 # to_run = (((511.6, 511.6), os.path.join(map_gen_dir, 'maps', 'street-map', filename)) for filename in
@@ -28,13 +32,14 @@ for d in (image_folder, output_folder):
     if not os.path.exists(d):
         os.makedirs(d)
 
-def random_split(points,random_range=(.05,.2)):
+def random_split(points,random_range=depot_proportion_range):
     # splits into (targets, depots) and returns those
     # random range is the proportion of depots
-    p=random_range[0]+np.random.random()*(random_range[1]-random_range[0])
     points=points.copy()
-    idx=int(len(points)*p)+1
     np.random.shuffle(points)
+    p=random_range[0]+np.random.random()*(random_range[1]-random_range[0])
+    idx=int(len(points)*p)+1
+    print(p)
     return points[idx:], points[:idx]
 
 def create_tsp_files(targets,depots,folder,basename,decimals=4):
@@ -182,6 +187,8 @@ for dims, filepath in to_run:
         coords = np.array(dims)*(i/N, j/M) - np.array(dims)/2
         euclidean_centers.append(coords)
 
+    # make sure the split/targets chosen is the same every time
+    np.random.seed(seed)
     euclidean_centers = np.array(euclidean_centers)
     targets,depots=random_split(euclidean_centers)
     create_tsp_files(targets,depots,output_folder,filename[:filename.index('.')])
