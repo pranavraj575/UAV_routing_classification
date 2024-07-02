@@ -47,14 +47,26 @@ function solver_to_dict(solver)
     return Dict(
 
         "initial_solution"=>[init_sol.vhcl_tours[i] for i in 1: data.dim_depots],
+        "initial_tour_costs"=>[init_sol.vhcl_tour_costs[i] for i in 1: data.dim_depots],
+        "initial_dwell_times"=>[[init_sol.vhcl_dwell_times[i][t] 
+                                    for t in init_sol.vhcl_tours[i][2:length(init_sol.vhcl_tours[i])-1]] 
+                                for i in 1: data.dim_depots],
         "initial_obj"=>init_sol.soln_cost,
         "initial_time"=>solver.initial_time,
 
         "local_search_solution"=>[local_sol.vhcl_tours[i] for i in 1: data.dim_depots],
+        "local_search_tour_costs"=>[local_sol.vhcl_tour_costs[i] for i in 1: data.dim_depots],
+        "local_search_dwell_times"=>[[local_sol.vhcl_dwell_times[i][t] 
+                                    for t in local_sol.vhcl_tours[i][2:length(local_sol.vhcl_tours[i])-1]] 
+                                for i in 1: data.dim_depots],
         "local_search_obj"=>local_sol.soln_cost,
         "local_search_time"=>solver.local_search_time,
 
         "final_solution"=>[final_sol.vhcl_tours[i] for i in 1: data.dim_depots],
+        "final_tour_costs"=>[final_sol.vhcl_tour_costs[i] for i in 1: data.dim_depots],
+        "final_dwell_times"=>[[final_sol.vhcl_dwell_times[i][t] 
+                                    for t in final_sol.vhcl_tours[i][2:length(final_sol.vhcl_tours[i])-1]] 
+                                for i in 1: data.dim_depots],
         "final_obj"=>final_sol.soln_cost,
         "final_time"=>solver.perturbation_time
     )

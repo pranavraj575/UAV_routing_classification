@@ -14,17 +14,17 @@ include(joinpath("src","network_graphing.jl"))
 trials=3
 # these are the parameters that we will run
 # note that we check the cartesian product of all of these
-alpha_factors=[1]#,2]
-tau_values=[1.]#,2.]
+alpha_factors=[1,2]
+tau_values=[1.,2.]
 local_search_modes=["1","12"]
 param_choices=[1,2]
 
 
 save_routes=true
 
-if true
-    #experiment_name="MD_all_values"
-    experiment_name="MD_alpha_1_tau_1"
+if false
+    # experiment_name="MD_test"
+    #experiment_name="MD_alpha_1_tau_1"
     input_dir=joinpath("input_data","MD_algorithm_datasets")
 else
     experiment_name="real_world_all_values"
@@ -59,15 +59,16 @@ for alpha_factor in alpha_factors
     for tau in tau_values
         global dic
         dic[(alpha_factor,tau)]=Dict()
-        println("USING ALPHA FACTOR: ",alpha_factor)
-        println("USING TAU: ",tau)
         for local_search_mode in local_search_modes
             for param in param_choices
+                println("USING ALPHA FACTOR: ",alpha_factor)
+                println("USING TAU: ",tau)
+                println("\tUSING LOCAL SEARCH MODE "*local_search_mode)
+                println("\tUSING LOCAL SEARCH PARAM "*string(param))
+
                 global dic
                 temp_dic= Dict(prefix=>Dict() for prefix in prefixes)
                 
-                println("\tUSING LOCAL SEARCH MODE "*local_search_mode)
-                println("\tUSING LOCAL SEARCH PARAM "*string(param))
                 for trial in 1:trials
                     println("\t\tTRIAL: ",trial)
                     global warmup
@@ -107,8 +108,13 @@ for alpha_factor in alpha_factors
                             solver_dic["percent_improvement"]=percent_improvement
 
                             if !save_routes
-                                for k in ("initial_solution","local_search_solution","final_solution")
-                                    delete!(solver_dic,k)
+                                for key_start in ("initial","local_search","final")
+                                    for key_end in ("_solution",
+                                        "_tour_costs",
+                                        "_dwell_times",
+                                        )
+                                        delete!(solver_dic,key_start*key_end)
+                                    end
                                 end
                             end
 
