@@ -11,10 +11,16 @@ include(joinpath("src","neighborhoods.jl"))
 num_vhcls_switch=1
 tol=.000001
 
-data_file_removal=joinpath("output","data_files","proxy_cmp_removal.txt")
-data_file_insertion=joinpath("output","data_files","proxy_cmp_insertion.txt")
+output_dir=joinpath("output","data_files","proxy_cost_comparison")
+
+data_file_removal=joinpath(output_dir,"removal_data.txt")
+data_file_insertion=joinpath(output_dir,"insertion_data.txt")
 
 folder=joinpath("input_data","MD_algorithm_datasets")
+
+if !isdir(output_dir)
+    mkpath(output_dir)
+end
 
 prefixes=[]
 files=readdir(folder)

@@ -11,8 +11,13 @@ plt.rc('font', size=12)
 
 
 
-our_file=os.path.join("output","data_files","experiment_results.txt")
-meme_file=os.path.join("output","data_files","memetic_results.txt")
+our_files=[
+    os.path.join("output","data_files","experiment_results","MD_all_values.txt"),
+    ]
+meme_files=[
+    os.path.join("output","data_files","experiment_results","memetic_results.txt"),
+]
+
 output_dir=os.path.join("output","plots", "memetic_comparison")
 
 if not os.path.exists(output_dir):
@@ -27,26 +32,44 @@ local_search_modes=["12","1"]
 param_choices=[2,1]
 # whether to include outliers in plot
 include_outliers=[True]
-
-
-f=open(meme_file)
-meme_dic_overall=ast.literal_eval(f.read())
-f.close()
-
-f=open(our_file)
-our_dic_overall=ast.literal_eval(f.read())
-f.close()
+meme_dic_overall=dict()
+our_dic_overall=dict()
+for files, dic_to_update in ((meme_files,meme_dic_overall),(our_files,our_dic_overall)):
+    for file in files:
+        f=open(file)
+        dic=ast.literal_eval(f.read())
+        f.close()
+        for alpha_tau in dic:
+            if alpha_tau not in dic_to_update:
+                dic_to_update[alpha_tau]=dict()
+            for neigh in dic[alpha_tau]:
+                if neigh not in dic_to_update[alpha_tau]:
+                    dic_to_update[alpha_tau][neigh]=dict()
+                dic_to_update[alpha_tau][neigh].update(dic[alpha_tau][neigh])
 
 
 for alpha in alpha_factors:
     for tau in tau_values:
         for local_search_mode in local_search_modes:
             for param in param_choices:
-                meme_dic=meme_dic_overall[(alpha,tau)][(local_search_mode,param)]
-                meme_dic={k:meme_dic[k]["final_obj"][0] for k in meme_dic}
-                our_dic=our_dic_overall[(alpha,tau)][(local_search_mode,param)]
-                our_dic={k:our_dic[k]["final_obj"][0] for k in our_dic}
-                dic={k:{'memetic':meme_dic[k],'ours':our_dic[k]}for k in our_dic}
+                try:
+                    meme_dic=meme_dic_overall[(alpha,tau)][(local_search_mode,param)]
+                    meme_dic={k:meme_dic[k]["final_obj"][0] for k in meme_dic}
+                    our_dic=our_dic_overall[(alpha,tau)][(local_search_mode,param)]
+                    our_dic={k:our_dic[k]["final_obj"][0] for k in our_dic}
+                except:
+                    print('keys not in both results:',
+                        "alpha_tau",(alpha,tau),
+                        "neighborhood",local_search_mode,param)
+                    continue
+                common_keys=set(our_dic.keys()).intersection(set(meme_dic.keys()))
+                if not common_keys:
+                    print('no common experiments, parameters:',
+                        "alpha_tau",(alpha,tau),
+                        "neighborhood",local_search_mode,param)
+                    continue
+
+                dic={k:{'memetic':meme_dic[k],'ours':our_dic[k]}for k in common_keys}
 
                 ident="neighborhoods_"+local_search_mode+"_param_"+str(param)+"_alpha_"+str(alpha)+"_tau_"+str(tau)
                 for outliers in include_outliers:
@@ -58,7 +81,7 @@ for alpha in alpha_factors:
 
 
                     species=list(dic.keys())
-                    species.sort(key=lambda m:int(m[2:]))
+                    species.sort(key=lambda m:int(m[2:]) if m[2:].isdigit() else 0)
                     penguin_means={}
                     for field in ('memetic','ours'):
                         if field in dic[species[0]]:

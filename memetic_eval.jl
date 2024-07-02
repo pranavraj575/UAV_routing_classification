@@ -18,7 +18,7 @@ param_choices=[2,1]
 
 output_dir=joinpath("output","data_files","memetic_comparison")
 plot_dir=joinpath("output","plots","compare_to_optimal")
-data_dir=joinpath("output","data_files")
+data_dir=joinpath("output","data_files","experiment_results")
 
 data_file=joinpath(data_dir,"memetic_results.txt")
 

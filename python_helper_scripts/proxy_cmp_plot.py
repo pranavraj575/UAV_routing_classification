@@ -1,11 +1,13 @@
 import ast,numpy as np, os
 from matplotlib import pyplot as plt
 
-plot_dir=os.path.join("output","proxy_cmp_plots")
+plot_dir=os.path.join("output","plots","proxy_cost_comparison")
 if not os.path.exists(plot_dir):
     os.makedirs(plot_dir)
+input_dir=os.path.join("output","data_files","proxy_cost_comparison")
 for mode in 'removal','insertion':
-    file=os.path.join("output","data_files","proxy_cmp_"+mode+".txt")
+    filename=mode+"_data.txt"
+    file=os.path.join(input_dir,filename)
     f=open(file,'r')
     dic=ast.literal_eval(f.read())
     f.close()

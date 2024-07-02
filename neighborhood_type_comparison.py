@@ -9,8 +9,8 @@ plt.rc('font', size=12)
 # files to grab dictionary from
 files=[
         os.path.join("output","data_files","experiment_results","MD_all_values.txt"),
-        os.path.join("output","data_files","experiment_results","real_world_all_values.txt"),
-        ] 
+        # os.path.join("output","data_files","experiment_results","real_world_all_values.txt"),
+        ]
 
 # path to save plots to
 plot_dir=os.path.join("output","plots","neighborhood_type_comparison")
