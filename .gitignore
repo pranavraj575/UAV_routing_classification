@@ -7,3 +7,5 @@
 **/desktop.ini
 /output
 /tsp_files
+*.egg-info
+*__pycache__

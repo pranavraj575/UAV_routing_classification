@@ -11,7 +11,7 @@ Tested on Windows 11 with Python 3.12, Julia 1.10, and Gurobi 11.0.2
     ```
 * Install Python dependencies (run command in cloned folder)
     ```bash
-    pip3 install -r requirements.txt
+    pip3 install -e .
     ```
 * Add julia packages
     ```bash
