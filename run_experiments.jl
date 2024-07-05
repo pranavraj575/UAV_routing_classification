@@ -23,21 +23,30 @@ param_choices=[1,2]
 
 
 # save includes dwell times, tours, and tour costs
-save_large_file=false
+save_large_file=true
 
 
 prefixes=nothing
 
 # define experiment name and input path
 # also explicitly define which files to use by setting prefixes=[list of file prefixes]
-if true
+if false
     # split the alpha_factors and tau into 4 trials
-    alpha_factor_to_use=1
-    tau_to_use=1
+    alpha_factor_to_use=2
+    tau_to_use=2
 
     alpha_factors=[alpha_factor_to_use]
     tau_values=[float(tau_to_use)]
     experiment_name="MD_alpha_"*string(alpha_factor_to_use)*"_tau_"*string(tau_to_use)
+
+    input_dir=joinpath("input_data","MD_algorithm_datasets")
+end
+
+if true
+    trials=1
+    save_large_file=true
+
+    experiment_name="MD_single_trial"
 
     input_dir=joinpath("input_data","MD_algorithm_datasets")
 end
@@ -79,6 +88,14 @@ prefixes=sort(prefixes,by=number_from_file)
 warmup=true
 dic=Dict()
 println("SAVING TO: ",data_file)
+println("doing experiment with params:")
+println("\talphas: ",alpha_factors)
+println("\ttaus: ",tau_values)
+println("\tlocal search modes: ",local_search_modes)
+println("\tlocal search params: ",param_choices)
+println("\ttrials: ",trials)
+println("\tinput dir: ",input_dir)
+
 for alpha_factor in alpha_factors
     for tau in tau_values
         global dic

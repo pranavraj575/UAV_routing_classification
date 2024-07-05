@@ -192,6 +192,9 @@ for dims, filepath in to_run:
     np.random.seed(seed)
     euclidean_centers = np.array(euclidean_centers)
     targets,depots=random_split(euclidean_centers)
+
+    np.savetxt(os.path.join(output_folder,filename[:filename.index('.')]+'_targets.txt'),targets)
+    np.savetxt(os.path.join(output_folder,filename[:filename.index('.')]+'_depots.txt'),depots)
     create_tsp_files(targets,depots,output_folder,filename[:filename.index('.')])
 
     print('number of buildings:', len(euclidean_centers))

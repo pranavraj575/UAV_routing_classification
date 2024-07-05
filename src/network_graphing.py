@@ -21,11 +21,9 @@ f.close()
 
 color_vectors=[np.array([float(i==k) for k in range(3)]) for i in range(3)]
 
-def rand_color(brightness=.25):
-    v=np.zeros(3)
-    while np.linalg.norm(v)<brightness:
-        v=np.array(color_vectors)@np.random.random(3)
-    return v
+def rand_color():
+    v=np.array(color_vectors)@np.random.random(3)
+    return v/np.linalg.norm(v)
 
 # colors of paths
 color_list=[rand_color(), 'red','green','blue','cyan','magenta','yellow']+[rand_color() for _ in range(len(dic['depots']))]

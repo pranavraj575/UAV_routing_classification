@@ -8,7 +8,7 @@ PYTHON_COMMAND="python"
 PYTHON_FILE=joinpath("src", "network_graphing.py")
 
 
-function graph_route(route,output_file,temp_file_name=joinpath("output","temp","TEMP.txt"),cleanup=false)
+function graph_route(route,output_file;temp_file_name=joinpath("output","temp","TEMP.txt"),cleanup=false)
     # graphs the route object given
     # output file is where to save it
     # temp file is the temporary file made to interface with python graph_route.py
