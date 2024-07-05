@@ -65,5 +65,5 @@ for key,dist in (("Berlin_0_1024",511.6),("NewYork_0_1024",511.8)):
         ax=plt.gca(),
         )
     
-    plt.savefig(os.path.join("output","plots","generated_maps",key+"_route_output.png"))
+    plt.savefig(os.path.join("output","plots","generated_maps",key+"_route_output.png"),bbox_inches='tight')
     plt.close()
