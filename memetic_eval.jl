@@ -16,13 +16,12 @@ local_search_modes=["12","1"]
 # check top k results in local search
 param_choices=[2,1]
 
-output_dir=joinpath("output","data_files","memetic_comparison")
 plot_dir=joinpath("output","plots","compare_to_optimal")
 data_dir=joinpath("output","data_files","experiment_results")
 
-data_file=joinpath(data_dir,"memetic_results.txt")
+data_file=joinpath(data_dir,"testmemetic_results.txt")
 
-for d in (plot_dir,output_dir,data_dir)
+for d in (plot_dir,data_dir)
     if !isdir(d)
         mkpath(d)
     end
@@ -45,7 +44,7 @@ for file in files
         push!(prefixes,prefix)
     end
 end
-# prefixes=["MM1"]
+prefixes=["MM1"]
 
 prefixes=sort(prefixes,by=number_from_file)
 

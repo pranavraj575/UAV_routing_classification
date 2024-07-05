@@ -31,7 +31,7 @@ prefixes=nothing
 # define experiment name and input path
 # also explicitly define which files to use by setting prefixes=[list of file prefixes]
 if false
-    # split the alpha_factors and tau into 4 trials
+    # split the alpha_factors and tau into 4 separate experiments
     alpha_factor_to_use=2
     tau_to_use=2
 
@@ -42,7 +42,7 @@ if false
     input_dir=joinpath("input_data","MD_algorithm_datasets")
 end
 
-if true
+if false
     trials=1
     save_large_file=true
 

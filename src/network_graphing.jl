@@ -5,7 +5,7 @@
 include("route.jl")
 
 PYTHON_COMMAND="python"
-PYTHON_FILE=joinpath("src", "network_graphing.py")
+PYTHON_FILE=joinpath("python_helper_scripts", "graph_network_from_julia.py")
 
 
 function graph_route(route,output_file;temp_file_name=joinpath("output","temp","TEMP.txt"),cleanup=false)
