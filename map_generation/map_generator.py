@@ -9,7 +9,8 @@ import itertools
 seed=69
 
 
-PRINTIMG = False  # whether to save image
+PRINTIMG = True  # whether to save image
+center_color = (255, 0, 0)
 PROPORTION_CUTOFF = 5e-5  # proportion of pixels needed to register a building
 map_gen_dir = os.path.dirname(os.path.join(os.getcwd(), sys.argv[0]))
 DIR = os.path.dirname(map_gen_dir)
@@ -171,14 +172,14 @@ for dims, filepath in to_run:
         elif PRINTIMG:
             excess += np.expand_dims(thing, axis=2)
     if PRINTIMG:
-        colorful_buildings = (colorful_buildings*128 + excess*127).astype(np.uint8)
+        colorful_buildings = (128*(1-colorful_buildings)+127*(1-arr.reshape(list(arr.shape)+[-1]))).astype(np.uint8)
         rad = .003*(N + M)/2
         for center in building_centers:
             for i in range(int(center[0] - rad*2), int(center[0] + rad*2)):
                 for j in range(int(center[1] - rad*2), int(center[1] + rad*2)):
                     if i >= 0 and j >= 0 and i < len(colorful_buildings) and j < len(colorful_buildings[i]):
-                        if np.linalg.norm(np.array(center) - (i, j)) < rad:
-                            colorful_buildings[i, j, :] = (255, 0, 0)
+                        if np.linalg.norm(np.array(center) - (i, j)) < rad and center_color is not None:
+                            colorful_buildings[i, j, :] = center_color
         save_name = os.path.join(image_folder, filename[:filename.index('.')] + '.png')
         print('saving img to', save_name)
         save_img(arr=colorful_buildings, filename=save_name)

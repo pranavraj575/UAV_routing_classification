@@ -30,7 +30,7 @@ prefixes=nothing
 
 # define experiment name and input path
 # also explicitly define which files to use by setting prefixes=[list of file prefixes]
-if false
+if true
     # split the alpha_factors and tau into 4 separate experiments
     alpha_factor_to_use=2
     tau_to_use=2

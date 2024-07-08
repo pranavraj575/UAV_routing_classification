@@ -13,7 +13,7 @@ def graph_route(targets,
                 depots,
                 tours,
                 tour_labels=None,
-                labels=None,
+                with_labels=False,
                 color_list=None,
                 rotation=None,
                 depot_color="red",
@@ -32,9 +32,7 @@ def graph_route(targets,
             assumes targets are indexed starting from 1, 
                 depots indexed starting from |targets|+1
         tour_labels: |tours| size iterable of names for each tour, in order
-        labels: UNIMPLEMENTED (T+D) length list of names for each POI 
-            first targets, then depots
-            if None, just uses index, starting at 1
+        with_labels: whether to put depot labels on them
         color_list: list of colors to use for tour edges
             should be length of |depots|
             if None, randomizes
@@ -85,7 +83,7 @@ def graph_route(targets,
         ax=plt.gca()
     nx.draw_networkx(G,
         pos=pos,
-        with_labels=False, # whether to label targets
+        with_labels=with_labels, # whether to label targets
         font_weight='bold', 
         node_color=node_color,
         edge_color=edge_color,
