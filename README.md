@@ -17,5 +17,20 @@ Tested on Windows 11 with Python 3.12, Julia 1.10, and Gurobi 11.0.2
     ```bash
     julia setup.jl
     ```
+## Run experiments
+* collect experiment data with 
+    ```bash 
+    julia run_experiments.jl
+    ```
+
+    this will run our algorithm on tsp files from a specified folder
+
+    change the parameters in the file to mess with the input files, alpha/tau values, and the neighborhood paremters used
+* collect memetic experiment data with 
+    ```bash 
+    julia memetic_eval.jl
+    ```
+    this will use the memetic routes and run gradient descent to obtain memetic values
+* plot comparisions between our data and memetic data with `python memetic_plot.py`
 
 

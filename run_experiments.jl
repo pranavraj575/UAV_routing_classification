@@ -32,8 +32,8 @@ prefixes=nothing
 # also explicitly define which files to use by setting prefixes=[list of file prefixes]
 if true
     # split the alpha_factors and tau into 4 separate experiments
-    alpha_factor_to_use=2
-    tau_to_use=2
+    alpha_factor_to_use=1
+    tau_to_use=1
 
     alpha_factors=[alpha_factor_to_use]
     tau_values=[float(tau_to_use)]
