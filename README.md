@@ -3,8 +3,8 @@
 Tested on Windows 11 with Python 3.12, Julia 1.10, and Gurobi 11.0.2
 
 ## Installation
-* Install (Python)[https://www.python.org/downloads/] and (Julia)[https://julialang.org/downloads/]
-* Obtain Gurobi Liscence, install (Gurobi)[https://www.gurobi.com/]
+* Install [Python](https://www.python.org/downloads/) and [Julia](https://julialang.org/downloads/)
+* Obtain Gurobi Liscence, install [Gurobi](https://www.gurobi.com/)
 * Clone this repository 
     ```bash
     git clone https://github.com/pranavraj575/UAV_routing_classification
