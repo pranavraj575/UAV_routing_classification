@@ -10,9 +10,23 @@ dic=ast.literal_eval(open(data_file,'r').read())
 
 alpha_tau=(1,1)
 net_params=("12",2)
-color_list=['black','magenta','cyan','purple','orange','blue','yellow','#00ff00']
+color_list=['#000000',
+            '#00ffff',
+            '#0000ff',
+            '#ff00ff',
+            'orange',
+            'purple',
+            '#00ff00',
 
-for key,dist in (("Berlin_0_1024",511.6),("NewYork_0_1024",511.8)):
+            '#007f7f',
+            '#00007f',
+            '#7f007f',
+            '#007f00',
+            ]
+
+keys_dists=[(key,511.6) for key in dic[alpha_tau][net_params].keys()]
+
+for key,dist in keys_dists:
     image_file=os.path.join(DIR,"output","plots","generated_maps",key+".png")
     
     depots=np.loadtxt(os.path.join("output","data_files","generated_maps",key+"_depots.txt"))

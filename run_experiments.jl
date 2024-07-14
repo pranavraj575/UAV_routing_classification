@@ -30,7 +30,7 @@ prefixes=nothing
 
 # define experiment name and input path
 # also explicitly define which files to use by setting prefixes=[list of file prefixes]
-if true
+if false
     # split the alpha_factors and tau into 4 separate experiments
     alpha_factor_to_use=1
     tau_to_use=1
@@ -51,9 +51,10 @@ if false
     input_dir=joinpath("input_data","MD_algorithm_datasets")
 end
 
-if false
+if true
     experiment_name="real_world_all_values"
     input_dir=joinpath("output","data_files","generated_maps")
+    trials=1
 end
 
 if false

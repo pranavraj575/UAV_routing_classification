@@ -26,9 +26,8 @@ to_run = (
           )
 
 to_run = [((511.6, 511.6), os.path.join(map_gen_dir, 'maps', 'street-map', filename)) for filename in
-          os.listdir(os.path.join(map_gen_dir, 'maps', 'street-map')) if filename not in ['NewYork_0_1024.map']]
-to_run+=[((511.8, 511.8), os.path.join(map_gen_dir, 'maps','street-map', 'NewYork_0_1024.map')),
-]
+          os.listdir(os.path.join(map_gen_dir, 'maps', 'street-map')) if '1024' in filename]
+#to_run=[((511.8, 511.8), os.path.join(map_gen_dir, 'maps','street-map', 'NewYork_0_1024.map')),]
 
 image_folder = os.path.join(DIR, 'output', 'plots', 'generated_maps')
 output_folder = os.path.join(DIR, "output", "data_files", "generated_maps")
