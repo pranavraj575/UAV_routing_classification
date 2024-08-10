@@ -2,6 +2,8 @@
 
 Tested on Windows 11 with Python 3.12, Julia 1.10, and Gurobi 11.0.2
 
+Full paper available on [arxiv](https://arxiv.org/abs/2310.08828)
+
 ## Installation
 * Install [Python](https://www.python.org/downloads/) and [Julia](https://julialang.org/downloads/)
 * Obtain Gurobi Liscence, install [Gurobi](https://www.gurobi.com/)
