@@ -1,10 +1,13 @@
-# [UAV Routing for Enhancing the Performance of a Classifier-in-the-loop](https://arxiv.org/abs/2310.08828)
+# [UAV Routing for Enhancing the Performance of a Classifier-in-the-loop](https://link.springer.com/article/10.1007/s10846-024-02169-1)
+
+![](https://github.com/pranavraj575/UAV_routing_classification/blob/main/map_generation/tsp_real_world_examples.gif)
+
+Full paper available [here](https://link.springer.com/article/10.1007/s10846-024-02169-1)
+
+## Installation
 
 Tested on Windows 11 with Python 3.12, Julia 1.10, and Gurobi 11.0.2
 
-Full paper available on [arxiv](https://arxiv.org/abs/2310.08828)
-
-## Installation
 * Install [Python](https://www.python.org/downloads/) and [Julia](https://julialang.org/downloads/)
 * Obtain Gurobi Liscence, install [Gurobi](https://www.gurobi.com/)
 * Clone this repository 
